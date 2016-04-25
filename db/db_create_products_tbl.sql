@@ -1,0 +1,22 @@
+CREATE TABLE products (
+  id INT AUTO_INCREMENT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  maker_id INT NOT NULL,
+  maker_name VARCHAR(255) NOT NULL,
+  maker_url VARCHAR(255),
+  img_src VARCHAR(255),
+  description TEXT,
+  main_category_id INT NOT NULL,
+  category_id INT NOT NULL,
+  item_code VARCHAR(255) NOT NULL,
+  price_min INT NOT NULL,
+  price_max INT DEFAULT 0,
+  msds_link VARCHAR(255),
+  orange_catalog VARCHAR(255),
+  details_urls VARCHAR(255),
+  stock_status TINYINT(2) NOT NULL DEFAULT 0,
+  create_time DATETIME NOT NULL,
+  update_time DATETIME NOT NULL,
+  delete_flag TINYINT(2) DEFAULT 0,
+  PRIMARY KEY (id)
+);

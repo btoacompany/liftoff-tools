@@ -1,0 +1,7 @@
+id	name	url	create_time	update_time	delete_flag
+1	Amazon	http://amazon.jp/	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+2	Rakuten	http://rakuten.jp/	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+3	Yahoo	http://yahoo.com/	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+4	Alibaba	http://alibaba.com/	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+5	Shopwise	http://shopwise.ph/	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+6	SM Group	http://smgroup.ph/	2016-04-22 15:00:00	2016-04-22 15:00:00	0

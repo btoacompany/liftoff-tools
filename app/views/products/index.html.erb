@@ -1,0 +1,19 @@
+<div id="wrapper">
+<div id="contents">
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Product Name</th>
+    <th>Link</th>
+  </tr>
+  <% @products.each do | product | %>
+    <tr>
+      <td><%= product[:id] %></td>
+      <td><%= product[:name] %></td>
+      <td><a href="/products/<%= product[:id] %>">link</a></td>
+    </tr>
+  <% end %>
+</table>
+
+</div> <!-- contents -->
+</div> <!-- wrapper -->

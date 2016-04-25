@@ -1,0 +1,13 @@
+items:
+  man_01: 
+    -color
+    -weight
+    -sourness
+  man_02:
+    -color
+    -weight
+    -sweetness
+  ora_01:
+    -weight
+    -diameter
+    -sourness

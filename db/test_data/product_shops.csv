@@ -1,0 +1,10 @@
+id	product_id	shop_id	shop_name	url	img_src	price	sale_price	before_sale_price	min_purchase	stock_status	create_time	update_time	delete_flag
+1	2	1	Amazon	www.product.com	product2.jpg	200	100	200	1	1	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+2	2	3	Yahoo	www.product.com	product2.jpg	200	100	200	1	0	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+3	3	1	Amazon	www.product.com	product2.jpg	200	100	200	1	1	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+4	4	2	Rakuten	www.product.com	product2.jpg	200	100	200	1	0	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+5	4	4	Alibaba	www.product.com	product2.jpg	200	100	200	1	0	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+6	1	1	Amazon	www.product.com	product2.jpg	200	100	200	1	1	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+7	5	3	Yahoo	www.product.com	product2.jpg	200	100	200	1	0	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+8	6	2	Rakuten	www.product.com	product2.jpg	200	100	200	1	1	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+9	5	4	Alibaba	www.product.com	product2.jpg	200	100	200	1	0	2016-04-22 15:00:00	2016-04-22 15:00:00	0

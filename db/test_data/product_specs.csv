@@ -1,0 +1,7 @@
+product_id	item_code	specs	create_time	update_time	delete_flag
+1	man-02	{color:'yellow', weight: '2lbs', sweetness:'lvl2'}	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+2	man-01	{color:'green', weight: '3lbs', sourness:'lvl4'}	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+3	man-02	{color:'yellow', weight: '2lbs', sweetness:'lvl3'}	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+4	sal-01	{weight:'6lbs', freshness:'2hrs'}	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+5	ora-01	{weight:'1lbs', diameter:'5cm', sourness:'lvl4'}	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+6	oni-02	{diameter:'7cm', weight:'2lbs'}	2016-04-22 15:00:00	2016-04-22 15:00:00	0

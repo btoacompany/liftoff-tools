@@ -1,0 +1,35 @@
+main_category:
+  10: Fruits
+  11: Fish
+  12: Vegetables
+categories:
+  10001:
+    name: Mango
+    items:
+      man_01: Green Mango
+      man_02: Sweet Mango
+  10002:
+    name: Orange
+    items:
+      ora_01: Sunkist Orange
+      ora_02: Ponkan Orange
+  11001:
+    name: Salmon
+    items:
+      sal_01: Atlantic Salmon
+      sal_02: Freshwater Salmon
+  11002:
+    name: Bass 
+    items:
+      bas_01: Largemouth Bass
+      bas_02: Striped Bass
+  12001:
+    name: Carrot
+    spces:
+      car_01: Mini Carrot
+      car_02: Nantes Carrot
+  12002:
+    name: Onion
+    items:
+      oni_01: Red Onion
+      oni_02: White Onion

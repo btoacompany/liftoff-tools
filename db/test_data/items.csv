@@ -1,0 +1,13 @@
+id	item_code	name	img_src	specs	category_id	create_time	update_time	delete_flag
+1	man-01	green mango	itemimg.jpg	color,weight,sourness	10001	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+2	man-02	sweet mango	itemimg.jpg	color,weight,sweetness	10001	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+3	ora-01	sunkist orange	itemimg.jpg	weight,diameter,sourness	10002	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+4	ora-02	ponkan orange	itemimg.jpg	weight,diameter,sweetness	10002	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+5	sal-01	atlantic salmon	itemimg.jpg	weight,freshness	11001	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+6	sal-02	sockeye salmon	itemimg.jpg	weight,freshness,eye color	11001	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+7	bas-01	largemouth bass	itemimg.jpg	weight,mouth size,freshness	11002	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+8	bas-02	srtiped bass	itemimg.jpg	weight,stripes,freshness	11002	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+9	car-01	mini carrot	itemimg.jpg	size,color,taste	12001	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+10	car-02	nantes carrot	itemimg.jpg	size,color,taste	12001	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+11	oni-01	red onion	itemimg.jpg	diameter,weight	12002	2016-04-22 15:00:00	2016-04-22 15:00:00	0
+12	oni-02	white onion	itemimg.jpg	diameter,weight	12002	2016-04-22 15:00:00	2016-04-22 15:00:00	0
