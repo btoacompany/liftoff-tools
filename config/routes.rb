@@ -2,19 +2,36 @@ Rails.application.routes.draw do
   root 'tests#index'
     
   # product tools
-  get	'products/'			=> 'products#index'
-  get	'products/create'		=> 'products#create'
-  get	'products/:id/edit'		=> 'products#edit'
-  post	'products/create_action'	=> 'products#create_action'
-  post	'products/:id/edit_action'	=> 'products#edit_action'	
-  post	'products/:id/delete_action'	=> 'products#delete_action'
+  get	'/products'			=> 'products#index'
+  get	'/products/create'		=> 'products#create'
+  get	'/products/:id/edit'		=> 'products#edit'
+  post	'/products/create_action'	=> 'products#create_action'
+  post	'/products/edit_action'		=> 'products#edit_action'	
+  post	'/products/delete_action'	=> 'products#delete_action'
   
   # maker tools
+  get	'/makers'			=> 'makers#index'
+  get	'/makers/create'		=> 'makers#create'
+  get	'/makers/:id/edit'		=> 'makers#edit'
+  post	'/makers/create_action'		=> 'makers#create_action'
+  post	'/makers/edit_action'		=> 'makers#edit_action'	
+  post	'/makers/delete_action'		=> 'makers#delete_action'
 
   # shops tools
+  get	'/shops'			=> 'shops#index'
+  get	'/shops/create'			=> 'shops#create'
+  get	'/shops/:id/edit'		=> 'shops#edit'
+  post	'/shops/create_action'		=> 'shops#create_action'
+  post	'/shops/edit_action'		=> 'shops#edit_action'	
+  post	'/shops/delete_action'		=> 'shops#delete_action'
 
   # items tools
-
+  get	'/items/'			=> 'items#index'
+  get	'/items/create'			=> 'items#create'
+  get	'/items/:id/edit'		=> 'items#edit'
+  post	'/items/create_action'		=> 'items#create_action'
+  post	'/items/edit_action'		=> 'items#edit_action'	
+  post	'/items/delete_action'		=> 'items#delete_action'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

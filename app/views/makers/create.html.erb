@@ -1,0 +1,22 @@
+<div id="wrapper">
+<div id="contents">
+  <h3 class="l_align">Create New Maker</h3>
+  <%= form_tag( "/makers/create_action", method: "post" ) do %>
+  <table>
+      <tr>
+	<td>Maker Name: </td>
+	<td><input type="text" value="" name="name" placeholder="Enter maker name here"/></td>
+      </tr>
+      <tr>
+	<td>Maker URL: </td>
+	<td><input type="text" value="" name="url" placeholder="Enter maker url here" width="200"/></td>
+      </tr>
+      <tr>
+	<td class="btn r_align" colspan="2">
+	  <input type="submit" value="Submit" />
+	</td>
+      </td>	
+  </table>
+  <% end %>
+</div> <!-- contents -->
+</div> <!-- wrapper -->

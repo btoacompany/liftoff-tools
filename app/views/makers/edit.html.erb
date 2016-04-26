@@ -1,0 +1,25 @@
+<div id="wrapper">
+<div id="contents">
+  <h3 class="l_align">Update Maker Info</h3>
+  <%= form_tag( "/makers/edit_action", method: "post" ) do %>
+  <input type="hidden" name="id" value="<%= params[:id] %>" />
+  <table>
+    <% @makers.each do | item | %>
+      <tr>
+	<td>Maker Name: </td>
+	<td><input type="text" value="<%= item[:name] %>" name="name" placeholder="Enter maker name here"/></td>
+      </tr>
+      <tr>
+	<td>Maker URL: </td>
+	<td><input type="text" value="<%= item[:url] %>" name="url" placeholder="Enter maker url here" width="200"/></td>
+      </tr>
+      <tr>
+	<td class="btn r_align" colspan="2">
+	  <input type="submit" value="Update" />
+	</td>
+      </tr>	
+    <% end %>
+  </table>
+  <% end %>
+</div> <!-- contents -->
+</div> <!-- wrapper -->

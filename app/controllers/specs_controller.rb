@@ -2,6 +2,7 @@
 
 class SpecsController < ApplicationController
   def index
+    @specs = Specs.where(:delete_flag => 0)
   end
 
   def create

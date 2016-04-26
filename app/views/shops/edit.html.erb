@@ -1,0 +1,25 @@
+<div id="wrapper">
+<div id="contents">
+  <h3 class="l_align">Update Shop Info</h3>
+  <%= form_tag( "/shops/edit_action", method: "post" ) do %>
+  <input type="hidden" name="id" value="<%= params[:id] %>" />
+  <table>
+    <% @shops.each do | item | %>
+      <tr>
+	<td>Shop Name: </td>
+	<td><input type="text" value="<%= item[:name] %>" name="name" placeholder="Enter shop name here"/></td>
+      </tr>
+      <tr>
+	<td>Shop URL: </td>
+	<td><input type="text" value="<%= item[:url] %>" name="url" placeholder="Enter shop url here" width="200"/></td>
+      </tr>
+      <tr>
+	<td class="btn r_align" colspan="2">
+	  <input type="submit" value="Update" />
+	</td>
+      </tr>	
+    <% end %>
+  </table>
+  <% end %>
+</div> <!-- contents -->
+</div> <!-- wrapper -->

@@ -2,20 +2,39 @@
 
 class MakersController < ApplicationController
   def index
+    @makers = Makers.where(:delete_flag => 0)
   end
 
   def create
+    #do nothing
   end
 
-  def create_complete
+  def create_action
+    maker = Makers.new
+    maker.save_record(params)
+
+    redirect_to_index 
   end
 
   def edit
+    @makers = Makers.where(:id => params[:id], :delete_flag => 0)
   end
   
-  def edit_complete
+  def edit_action
+    maker = Makers.find(params[:id])
+    maker.save_record(params)
+
+    redirect_to_index 
   end
 
-  def delete
+  def delete_action
+    maker = Makers.find(params[:id])
+    maker.delete_record
+
+    redirect_to_index 
+  end
+
+  def redirect_to_index
+    redirect_to "/makers" 
   end
 end

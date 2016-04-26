@@ -1,16 +1,17 @@
 <div id="wrapper">
 <div id="contents">
+<a href="/products/create">Add new product</a>
 <table>
   <tr>
     <th>ID</th>
     <th>Product Name</th>
     <th>Link</th>
   </tr>
-  <% @products.each do | product | %>
+  <% @products.each do | item | %>
     <tr>
-      <td><%= product[:id] %></td>
-      <td><%= product[:name] %></td>
-      <td><a href="/products/<%= product[:id] %>">link</a></td>
+      <td><%= item[:id] %></td>
+      <td><%= item[:name] %></td>
+      <td><a href="/products/<%= item[:id] %>/edit">edit</a></td>
     </tr>
   <% end %>
 </table>

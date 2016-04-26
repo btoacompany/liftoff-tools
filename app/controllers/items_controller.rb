@@ -2,6 +2,7 @@
 
 class ItemsController < ApplicationController
   def index
+    @items = Items.where(:delete_flag => 0)
   end
 
   def create

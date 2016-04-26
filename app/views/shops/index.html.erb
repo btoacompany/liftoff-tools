@@ -1,0 +1,49 @@
+<div id="wrapper">
+<div id="container">
+  <div id="content_shop">
+    <h2 class="r_align">Shops Tool</h2>
+    <p class="l_align"><a href="/shops/create" class="a_btn">Add New Shop</a></p>
+
+    <table class="tbl_common" border="0">
+      <tr>
+	<th>ID</th>
+	<th>Shop Name</th>
+	<th>Shop Url</th>
+	<th class="c_align">Action</th>
+      </tr>
+      <% @shops.each do | item | %>
+      <tr class="item_<%= item[:id] %>">
+	<td><%= item[:id] %></td>
+	<td><%= item[:name] %></td>
+	<td>
+	  <a href="<%= item[:url] %>" target="blank"><%= item[:url] %></a>
+	</td>
+	<td class="c_align">
+	  <input type="button" class="edit_item" data-id="<%= item[:id] %>" value="edit" /> | 
+	  <input type="button" class="delete_item" data-id="<%= item[:id] %>" value="del" />
+	</td>
+      </tr>
+      <% end %>
+    </table>
+  </div> <!-- content_shop -->
+</div> <!-- container -->
+</div> <!-- wrapper -->
+
+<script type="text/javascript">
+
+$('.delete_item').click(function() {
+  var shop_id = ($(this).attr('data-id')); //get attributes of clicked item
+
+  if (confirm("Are you sure you want to delete this item?")) {
+    $.post("/shops/delete_action", { 'id': shop_id }); //send post request
+    $(".item_" + shop_id).remove(); //remove item upon deletion
+  }
+  return false; //do nothing
+});
+
+$('.edit_item').click(function() {
+  var shop_id = ($(this).attr('data-id'));
+  window.location.href = "/shops/"+shop_id+"/edit"; //redirect to assigned url
+});
+
+</script>

@@ -6,11 +6,11 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 
-  <%= stylesheet_link_tag    'common' %>
+  <%= stylesheet_link_tag    'common', media: 'all', 'data-turbolinks-track' => true %>
 </head>
 <body>
-
+<%= render "shared/header"%>
 <%= yield %>
-
+<%= render "shared/footer"%>
 </body>
 </html>
