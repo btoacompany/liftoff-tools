@@ -1,0 +1,181 @@
+<div id="wrapper">
+<div id="contents">
+  <h3 class="c_align">Add Shops</h3>
+  <%= form_tag( "/products/edit/action", method: "post", id: "shops_form" ) do %>
+    <div class="shops_list">
+    <% @shops.each do | shop | %>
+      <input type="hidden" class="id_<%= shop[:id] %>" value=""/>
+      <label>
+	<input type="checkbox" class="chk_shop shop_id_<%= shop[:id] %>" name="shop" value="<%= shop[:id] %>" /> 
+	<b><%= shop[:name] %></b>
+      </label> <br>
+
+      <table class="tbl_<%= shop[:id] %> shops">
+	<tr>
+	  <td>Product Link</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_product_url" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Image URL</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_img_src" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Price</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_price" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Sale Price</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_price_sale" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Minimum Purchase</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_min_purchase" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Stocks Count</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_stock_count" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Stock Status</td>
+	  <td>
+	    <select name="shop_<%= shop[:id] %>_stock_status">
+	      <option value="1">○</option>
+	      <option value="2">△</option>
+	      <option value="0">×</option>
+	    </select>
+	  </td>
+	</tr>
+      </table>
+    <% end %>
+    </div><br>
+
+    <input type="button" value="Submit" class="btn btn_submit" />
+  <% end %>
+</div> <!-- contents -->
+</div> <!-- wrapper -->
+
+<script>
+var shopIdsArr = [];
+var origShopIdsArr = [];
+
+$(document).ready(function() {
+  $('.shops').hide();
+
+  <% @product_shops.each do | product_shop | %>
+    selShopId = "<%= product_shop[:shop_id] %>";
+    elSelShopInput = "input[name='shop_" + selShopId + "_";
+
+    shopIdsArr.push(selShopId);
+    origShopIdsArr.push(selShopId);
+
+    $('.shop_id_' + selShopId).attr('checked','checked');
+    $('.tbl_' + selShopId).show();
+
+    $(".id_" + selShopId).val("<%= product_shop[:id] %>");
+    $(elSelShopInput + 'product_url').val("<%= product_shop[:product_url] %>");
+    $(elSelShopInput + 'img_src').val("<%= product_shop[:img_src] %>");
+    $(elSelShopInput + 'price').val("<%= product_shop[:price] %>");
+    $(elSelShopInput + 'price_sale').val("<%= product_shop[:price_sale] %>");
+    $(elSelShopInput + 'min_purchase').val("<%= product_shop[:min_purchase] %>");
+    $(elSelShopInput + 'stock_count').val("<%= product_shop[:stock_count] %>");
+    $("select[name='shop_" + selShopId + "_stock_status'").val("<%= product_shop[:stock_status] %>");
+  <% end %>
+});
+
+$('.chk_shop').change(function() {
+  var shopId = $(this).attr('value');
+  var tblId = '.tbl_' + shopId; 
+
+  if($(this).is(':checked')) {
+    $(tblId).show();
+    shopIdsArr.push(shopId);
+  } else {
+    $(tblId).hide();
+    shopIdsArr.splice( $.inArray(shopId, shopIdsArr), 1);
+
+    $(':input', tblId)
+      .val('')
+      .removeAttr('checked');  
+  }
+});
+
+$('.btn_submit').click(function() {
+  var shopInfo = {};
+  shopIdsArr = $.unique(shopIdsArr);
+  origShopIdsArr = $.unique(origShopIdsArr);
+
+  //get ids to be deleted
+  var delShopIds = origShopIdsArr.filter(function(val) {
+    return shopIdsArr.indexOf(val) == -1;
+  });
+
+  //get newly added shops 
+  var newShopIds = shopIdsArr.filter(function(val) {
+    return origShopIdsArr.indexOf(val) == -1;
+  });
+
+  //product shops to be deleted
+  if(!($.isEmptyObject(delShopIds))) {
+    $.each(delShopIds, function( key, shopId ) {
+      shopInfo[shopId] = {
+	id: $(".id_" + shopId).val(),
+	delete_flag: 1,
+      };
+
+      submit_data(shopInfo[shopId], 0);
+    });
+  } 
+
+  //create new product shops info
+  if(!($.isEmptyObject(newShopIds))) {
+    $.each(newShopIds, function( key, shopId ) {
+      shopInfo[shopId] = set_data(shopId, 0, 1);
+      submit_data(shopInfo[shopId], 1);
+    });
+  }
+
+  //update product shops info
+  $.each(shopIdsArr, function( key, shopId ) {
+    shopInfo[shopId] = set_data(shopId, 0, 0);
+    submit_data(shopInfo[shopId], 0);
+  });
+
+  window.location.href = "/products";
+});
+
+function set_data(shopId, new_data_flag=0) {
+  var elShopInput = "input[name='shop_" + shopId + "_";
+  var itemData = {};
+
+  itemData = {
+    id:		  $(".id_" + shopId).val(),
+    shop_id:	  shopId, 
+    product_id:   <%= @product_id %>,
+    product_url:  $(elShopInput + "product_url'").val(),
+    img_src:      $(elShopInput + "img_src'").val(),
+    price:	  $(elShopInput + "price'").val(),
+    price_sale:   $(elShopInput + "price_sale'").val(),
+    min_purchase: $(elShopInput + "min_purchase'").val(),
+    stock_count:  $(elShopInput + "stock_count'").val(),
+    delete_flag:  0,
+    stock_status: $("select[name='shop_" + shopId + "_stock_status'").val(),
+    new_data_flag: new_data_flag 
+  };
+
+  return itemData; 
+}
+
+function submit_data(itemData, new_data_flag=0) {
+  var postUrl = '/products/edit/action';
+
+  if( new_data_flag == 1 ) {
+    postUrl = '/products/create/action';
+  }
+
+  $.ajax({
+    type: 'POST',
+    url: postUrl,
+    data: itemData 
+  });
+}
+</script>

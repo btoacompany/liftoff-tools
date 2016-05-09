@@ -1,21 +1,21 @@
 <div id="wrapper">
 <div id="contents">
-  <h3 class="l_align">Create New Shop</h3>
+  <h3 class="c_align">Create New Shop</h3>
   <%= form_tag( "/shops/create_action", method: "post" ) do %>
-  <table>
+  <table class="center">
       <tr>
 	<td>Shop Name: </td>
-	<td><input type="text" value="" name="name" placeholder="Enter shop name here"/></td>
+	<td><input type="text" value="" name="name" /></td>
       </tr>
       <tr>
 	<td>Shop URL: </td>
-	<td><input type="text" value="" name="url" placeholder="Enter shop url here" width="200"/></td>
+	<td><input type="text" value="" name="url" width="200"/></td>
       </tr>
       <tr>
 	<td class="btn r_align" colspan="2">
-	  <input type="submit" value="Submit" />
+	  <input type="submit" value="Submit" class="btn" />
 	</td>
-      </td>	
+      </tr>	
   </table>
   <% end %>
 </div> <!-- contents -->

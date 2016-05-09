@@ -1,20 +1,118 @@
 <div id="wrapper">
-<div id="contents">
-<a href="/products/create">Add new product</a>
-<table>
-  <tr>
-    <th>ID</th>
-    <th>Product Name</th>
-    <th>Link</th>
-  </tr>
-  <% @products.each do | item | %>
-    <tr>
-      <td><%= item[:id] %></td>
-      <td><%= item[:name] %></td>
-      <td><a href="/products/<%= item[:id] %>/edit">edit</a></td>
-    </tr>
-  <% end %>
-</table>
+<div id="container">
+  <div id="side_menu">
+      <h3>カテゴリー</h3>
+      <ul id="menu-v">
+      <% @main_category.each do | mcat_id, mcat_val | %>
+	<li>
+	  <a href="/products/?mcat_id=<%= mcat_id %>"><%= mcat_val["name"] %></a>
+	  <ul>
+	    <% mcat_val["sub_categories"].each do | cat_id, cat_val | %>
+	      <li>
+		<a href="/products/?cat_id=<%= cat_id %>"><%= cat_val %></a>
+		<ul>
+		</ul>
+	      </li>
+	    <% end %>
+	  </ul>
+	</li>
+      <% end %>
+  </div>
 
-</div> <!-- contents -->
+  <div id="content_products">
+    <div class="c_align">
+      <h2>Products Tool</h2>
+      <a href="/products/create" class="a_btn">Add New Product</a>
+    </div>
+
+      <div class="search_box">
+	<h3>詳細検索</h3><hr>
+	<form id="keyword_form">
+	  <div class="c_align">
+	    <input type="text" name="keyword" class="keyword_input" placeholder="Type in keyword..." value=""/>
+	    <input type="submit" class="keyword_search_btn" value="Search" />
+	  </div>
+	</form><br>
+
+	<form>
+	  <table class="tbl_common center" border="0">
+	    <tr>
+	      <td class="label">メーカー名</td>
+	      <td><input type="text" name="" value="" size="52"/></td>
+	    </tr>
+	    <tr>
+	      <td class="label">商品名</td>
+	      <td><input type="text" name="" value="" size="52"/></td>
+	    </tr>
+	    <% @item_specs.each do | spec | %>
+	      <tr>
+		<td class="label"><%= spec %></td>
+		<td><input type="text" name="" value="" size="52"/></td>
+	      </tr>
+	    <% end %>
+	    <tr>
+	      <td colspan="2" align="center"><input type="submit" value="検索する" class="btn search"/></td>
+	    </tr>
+	  </table>
+	</form>
+      </div><br>
+
+    <div class="search_results">
+      <h3 align="left">検索結果</h3><hr>
+      <% @temp.each_with_index do | item, i | %>
+	<table class="tbl_results" border="0">
+	  <tr>
+	    <td class="col1">
+	      <p class="img"><a href="/products/<%= item[:id] %>/edit"><%= image_tag item[:img_src], width:
+	      "100", height: "100", id: "item_img" %></a><p>
+	    </td>
+	    <td class="col2">
+	      <p class="name"><a href="/products/<%= item[:id] %>/edit"><%= item[:name] %></a></p>
+	      <p class="description"><%= item[:description] %></p>
+	    </td>
+	    <td class="col3">
+	      <% unless item[:msds_link].blank? %>
+		<p class="msds">
+		  <a href="<%= item[:msds_link] %>" target="blank">MSDS</a>
+		</p>
+	      <% end %>
+
+	      <% unless item[:orange_catalog_link].blank? %>
+		<p class="orange_catalog">
+		  <a href="<%= item[:orange_catalog_link] %>" target="blank">オレンジブックカタログ</a>
+		</p>
+	      <% end %>
+
+	      <% unless item[:details_links].blank? %>
+		<p class="links">
+		  <a href="<%= item[:details_links] %>" target="blank">詳細資料</a>
+		</p>
+	      <% end %>
+	    </td>
+	  </tr>
+	</table>
+	<hr class="dotted">
+      <% end %>
+    </div>
+  </div> <!-- content_shop -->
+</div> <!-- container -->
 </div> <!-- wrapper -->
+
+<script type="text/javascript">
+
+$('.delete_item').click(function() {
+  var shop_id = ($(this).attr('data-id')); //get attributes of clicked item
+
+  if (confirm("Are you sure you want to delete this item?")) {
+    $.post("/shops/delete_action", { 'id': shop_id }); //send post request
+    $(".item_" + shop_id).remove(); //remove item upon deletion
+  }
+  return false; //do nothing
+});
+
+$('.edit_item').click(function() {
+  var shop_id = ($(this).attr('data-id'));
+  window.location.href = "/shops/"+shop_id+"/edit"; //redirect to assigned url
+});
+
+</script>

@@ -1,0 +1,111 @@
+<div id="wrapper">
+<div id="contents">
+  <h3 class="c_align">Add Shops</h3>
+  <%= form_tag( "/products/create/action", method: "post", id: "shops_form" ) do %>
+    <div class="shops_list">
+    <% @shops.each do | shop | %>
+      <label>
+	<input type="checkbox" class="chk_shop" name="shop" value="<%= shop[:id] %>" /> 
+	<b><%= shop[:name] %></b>
+      </label> <br>
+
+      <table class="tbl_<%= shop[:id] %> shops">
+	<tr>
+	  <td>Product Link</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_product_url" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Image URL</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_img_src" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Price</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_price" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Sale Price</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_price_sale" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Minimum Purchase</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_min_purchase" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Stocks Count</td>
+	  <td><input type="text" name="shop_<%= shop[:id] %>_stock_count" value=""/></td>
+	</tr>
+	<tr>
+	  <td>Stock Status</td>
+	  <td>
+	    <select name="shop_<%= shop[:id] %>_stock_status">
+	      <option value="1">○</option>
+	      <option value="2">△</option>
+	      <option value="0">×</option>
+	    </select>
+	  </td>
+	</tr>
+      </table>
+    <% end %>
+    </div><br>
+
+    <input type="button" value="Submit" class="btn btn_submit" />
+  <% end %>
+</div> <!-- contents -->
+</div> <!-- wrapper -->
+
+<script>
+$(document).ready(function() {
+  $('.shops').hide();
+});
+
+var shopIdsArr = [];
+
+$('.chk_shop').change(function() {
+  var shopId = $(this).attr('value');
+  var tblId = '.tbl_' + shopId; 
+
+  if($(this).is(':checked')) {
+    $(tblId).show();
+    shopIdsArr.push(shopId);
+  } else {
+    $(tblId).hide();
+    shopIdsArr.splice( $.inArray(shopId, shopIdsArr), 1);
+
+    $(':input', tblId)
+      .val('')
+      .removeAttr('checked');  
+  }
+});
+
+$('.btn_submit').click(function() {
+  var shopInfo = {};
+  $.each(shopIdsArr, function( key, shopId ) {
+    var shopsInfoArr = $('.tbl_' + shopId + ' input');
+    elShopInput = "input[name='shop_" + shopId + "_";
+    shopInfo[shopId] = {
+      shop_id:	    shopId, 
+      product_id:   <%= @product_id %>,
+      product_url:  $(elShopInput + "product_url'").val(),
+      img_src:      $(elShopInput + "img_src'").val(),
+      price:	    $(elShopInput + "price'").val(),
+      price_sale:   $(elShopInput + "price_sale'").val(),
+      min_purchase: $(elShopInput + "min_purchase'").val(),
+      stock_count:  $(elShopInput + "stock_count'").val(),
+      stock_status: $("select[name='shop_" + shopId + "_stock_status'").val(),
+      delete_flag:  0
+    };
+
+    $.ajax({
+      type: 'POST',
+      url: '/products/create/action',
+      data: shopInfo[shopId]
+    });
+
+    if ( (shopIdsArr.length-1) == key ){
+      //TODO: add validations
+      window.location.href = "/products"
+    }
+  });
+});
+
+</script>

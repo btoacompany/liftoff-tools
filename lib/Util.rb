@@ -8,7 +8,10 @@ class Util
   end
 
   def self.categories
-    @category["categories"].each do | key, val |
-    end
+    return @category["categories"]
+  end
+
+  def self.category_items
+    return @category["category_items"]
   end
 end

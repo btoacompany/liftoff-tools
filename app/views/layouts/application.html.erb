@@ -7,10 +7,12 @@
   <%= csrf_meta_tags %>
 
   <%= stylesheet_link_tag    'common', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'menu-vertical', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'menu-vertical', 'data-turbolinks-track' => true %>
 </head>
 <body>
 <%= render "shared/header"%>
-<%= yield %>
+<%= yield %> <br>
 <%= render "shared/footer"%>
 </body>
 </html>

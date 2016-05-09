@@ -1,0 +1,87 @@
+<div id="wrapper">
+<div id="contents">
+  <h3 class="c_align">Create New Item</h3>
+  <%= form_tag( "/items/create_action", method: "post" ) do %>
+  <table class="center">
+      <tr>
+	<td>Item Name: </td>
+	<td><input type="text" value="" name="name"/></td>
+      </tr>
+      <tr>
+	<td>Main Category: </td>
+	<td>
+	  <select name="main_category_id" class="main_category">
+	    <option value=""></option>
+	    <% @main_category.each do | mcat_id, mcat_val | %>
+	      <option value="<%= mcat_id %>"><%= mcat_val["name"] %></option>
+	    <% end %>
+	  </select>
+	</td>
+      </tr>
+      <tr>
+	<td>Sub Category: </td>
+	<td>
+	  <select name="category_id" class="sub_category">
+	    <option value=""></option>
+	  </select>
+	</td>
+      </tr>
+      <tr>
+	<td>Specs: </td>
+	<td>
+	  <input type="text" value="" name="specs" /><br>
+	  <span class='note'>Separate specs by comma without space (Ex: height,weight,color...) </span>
+	</td>
+      </tr>
+      <tr>
+	<td>Description: </td>
+	<td><textarea name="description" cols="35" rows="5"></textarea></td>
+      </tr>
+      <tr>
+	<td class="btn c_align" colspan="2">
+	  <input type="submit" value="Submit" class="btn" />
+	</td>
+      </tr>	
+  </table>
+  <% end %>
+</div> <!-- contents -->
+</div> <!-- wrapper -->
+
+<script>
+/*-- this section is for fetching all categories on page load and saving it as objects --*/
+
+var categoryObj = { }; //initialize json object for category
+
+<% @main_category.each do | mcat_id, mcat_val | %>
+  var obj = { };
+  var mainCategoryId = "<%= mcat_id %>";
+  categoryObj[ mainCategoryId ] = [] ;
+
+  <% mcat_val["sub_categories"].each do | cat_id, cat_name | %>
+    obj = { "<%= cat_id %>": "<%= cat_name %>" };
+    categoryObj[ mainCategoryId ].push(obj);
+  <% end %>
+<% end %>
+
+/*---- functions section ---- */
+
+// set sub category options upon main category change 
+function setCategoryOptions( id ) {
+  var $elSubCat = $(".sub_category");
+  $elSubCat.empty();
+
+  $.each(categoryObj[id], function( key, val ) {
+    $.each(val, function( catId, catVal) {
+      $elSubCat.append($("<option></option>").attr("value", catId).text(catVal));
+    });
+  });
+}
+
+/*---- page actions section ---- */
+
+$(".main_category").change(function() {
+  var id = $(".main_category").val();
+  setCategoryOptions( id );
+});
+
+</script>

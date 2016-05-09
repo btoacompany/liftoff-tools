@@ -4,10 +4,17 @@ Rails.application.routes.draw do
   # product tools
   get	'/products'			=> 'products#index'
   get	'/products/create'		=> 'products#create'
+  post	'/products/create/specs'	=> 'products#create_specs'
+  post	'/products/create/confirm'	=> 'products#create_confirm'
+  post	'/products/create/action'	=> 'products#create_action'
+  post	'/products/create/shops'	=> 'products#create_shops'
+
   get	'/products/:id/edit'		=> 'products#edit'
-  post	'/products/create_action'	=> 'products#create_action'
-  post	'/products/edit_action'		=> 'products#edit_action'	
-  post	'/products/delete_action'	=> 'products#delete_action'
+  post	'/products/edit/specs'		=> 'products#edit_specs'
+  post	'/products/edit/confirm'	=> 'products#edit_confirm'
+  post	'/products/edit/shops'		=> 'products#edit_shops'
+  post	'/products/edit/action'		=> 'products#edit_action'	
+  post	'/products/delete'		=> 'products#delete_action'
   
   # maker tools
   get	'/makers'			=> 'makers#index'

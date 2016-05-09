@@ -1,20 +1,54 @@
 <div id="wrapper">
-<div id="contents">
-<a href="/items/create">Add new item</a>
-<table>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Edit</th>
-  </tr>
-  <% @items.each do | item | %>
-    <tr>
-      <td><%= item[:id] %></td>
-      <td><%= item[:name] %></td>
-      <td><a href="/items/<%= item[:id] %>/edit">edit</a></td>
-    </tr>
-  <% end %>
-</table>
+<div id="container">
+  <div id="content_items">
+    <div class="c_align">
+      <h2>Items Tool</h2>
+      <a href="/items/create" class="a_btn">Add New Item</a>
+    </div><br>
 
-</div> <!-- contents -->
+    <table class="tbl_common center" border="1">
+      <tr>
+	<th>Item Code</th>
+	<th>Item Name</th>
+	<th>Category</th>
+	<th>Specs</th>
+	<th class="c_align">Description</th>
+	<th class="c_align">Action</th>
+      </tr>
+      <% @items.each do | item | %>
+	<% cat_id = item[:category_id] %>
+	<tr class="item_<%= item[:id] %>">
+	  <td><%= item[:item_code] %></td>
+	  <td><%= item[:name] %></td>
+	  <td><%= @categories[cat_id] %></td>
+	  <td class="l_align" width="200"><%= item[:specs] %></td>
+	  <td class="l_align" width="250"><%= item[:description][0..50] %>...</td>
+	  <td class="c_align">
+	    <input type="button" class="edit_item" data-id="<%= item[:id] %>" value="edit" /> | 
+	    <input type="button" class="delete_item" data-id="<%= item[:id] %>" value="del" />
+	  </td>
+	</tr>
+      <% end %>
+    </table>
+  </div> <!-- content_item -->
+</div> <!-- container -->
 </div> <!-- wrapper -->
+
+<script type="text/javascript">
+
+$('.delete_item').click(function() {
+  var item_id = ($(this).attr('data-id')); //get attributes of clicked item
+
+  if (confirm("Are you sure you want to delete this item?")) {
+    $.post("/items/delete_action", { 'id': item_id }); //send post request
+    $(".item_" + item_id).remove(); //remove item upon deletion
+  }
+  return false; //do nothing
+});
+
+$('.edit_item').click(function() {
+  var item_id = ($(this).attr('data-id'));
+  window.location.href = "/items/"+item_id+"/edit"; //redirect to assigned url
+});
+
+</script>

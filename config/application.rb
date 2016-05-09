@@ -25,5 +25,7 @@ module Liftoff
 
     # Precompile addtional assets
     config.assets.precompile += %w( common.css )
+    config.assets.precompile += %w( menu-vertical.css )
+    config.assets.precompile += %w( menu-vertical.js )
   end
 end

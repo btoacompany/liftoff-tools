@@ -8,10 +8,19 @@ class Mongolib
   end
 
   def self.find( collection, cond = {} )
-    return @mongo[collection].find(cond)
+    @mongo[collection].find(cond)
   end
 
   def self.distinct( collection, key )
-    return @mongo[collection].find.distinct(key)
+    @mongo[collection].find.distinct(key)
   end
+
+  def self.save( collection, cond = {} )
+    @mongo[collection].insert_one(cond)
+  end
+
+  def self.update( collection, cond = {}, params = {} )
+    @mongo[collection].find(cond).update_one(params)
+  end
+
 end

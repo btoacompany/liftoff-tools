@@ -1,0 +1,69 @@
+<div id="wrapper">
+<div id="contents">
+  <h3 class="c_align">Add Specs</h3>
+  <%= form_tag( "/products/edit/confirm", method: "post" ) do %>
+    <input type="hidden" name="spec_keys" value="<%= @spec_keys %>" />
+    <table class="center">
+      <tr>
+	<th class="c_align">Spec</th>
+	<th>Details</th>
+	<th>Display Type</th>
+	<th class="metric">Metric</th>
+      </tr>
+      <% @item_specs.each do | spec | %>
+	<tr class="specs">
+	  <td><%= spec %>: </td>
+	  <% if @spec_changed == 1 %>
+	    <td><input type="text" value="" name="<%= spec %>" size="15"/></td>
+	  <% else %>
+	    <td><input type="text" value="<%= @specs[spec][:content] %>" name="<%= spec %>" size="15"/></td>
+	  <% end %>
+
+	  <td>
+	    <select name="<%= spec %>_display_type" class="display_type" data-id="<%= spec %>">
+	      <option value="0" <% if @specs[spec][:type].to_i == 0 %> selected <% end %> >Dropdown</option>
+	      <option value="1" <% if @specs[spec][:type].to_i == 1 %> selected <% end %> >Checkbox</option> 
+	      <option value="2" <% if @specs[spec][:type].to_i == 2 %> selected <% end %> >Range</option>
+	    </select>
+	  </td>
+	  <td class="metric">
+	    <input type="text" name="<%= spec %>_metric" class="<%= spec %>_metric"
+	    value="<%= @specs[spec][:metric] %>" size="3" style="background-color:#d4d4d4" disabled />
+	  </td>
+	</tr>
+      <% end %>
+      <tr>
+	<td class="btn c_align" colspan="2">
+	  <input type="submit" value="Confirm" class="btn" />
+	</td>
+      </tr>	
+    </table>
+  <% end %>
+</div> <!-- contents -->
+</div> <!-- wrapper -->
+
+<script>
+$(".specs .display_type").each(function() {
+  displayType = $(this).find(":selected").val();
+  spec = $(this).attr("data-id");
+
+  setMetric(displayType, spec);
+});
+
+$(".specs .display_type").change(function() {
+  displayType = $(this).val();
+  spec = $(this).attr("data-id");
+
+  setMetric(displayType, spec);
+});
+
+function setMetric (displayType, spec) {
+  metricClass = "." + spec + "_metric";
+
+  if ( displayType == 2 ) {
+    $(metricClass).removeAttr('disabled').css("background-color","yellow");
+  } else {
+    $(metricClass).attr('disabled','disabled').css("background-color","#d4d4d4");
+  }
+}
+</script>

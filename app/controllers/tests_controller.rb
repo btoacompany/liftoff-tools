@@ -1,5 +1,4 @@
 require 'Util.rb'
-require 'Mongolib.rb'
 
 class TestsController < ApplicationController
   def index
@@ -7,8 +6,7 @@ class TestsController < ApplicationController
 
     @tests = Makers.where(:id => 1)
 
-    Mongolib.connect
-    @tests1 = Mongolib.find(:test_tbl, {:firstname => "john"})
-    @tests2 = Mongolib.find(:test_tbl)
+    specs = ProductSpecs.new
+    @tests1 = specs.find({:firstname => "john"})
   end
 end

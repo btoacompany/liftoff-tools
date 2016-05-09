@@ -1,0 +1,74 @@
+<div id="wrapper">
+<div id="contents">
+  <h3 class="c_align">Confirm Product Info</h3>
+  <%= form_tag( "/products/create/shops", method: "post" ) do %>
+  <table class="tbl_common center" border="1">
+      <tr>
+	<td>Product Name: </td>
+	<td><%= session[:items][:name] %></td>
+      </tr>
+      <tr>
+	<td>Image URL: </td>
+	<td><%= session[:items][:img_src] %></td>
+      </tr>
+      <tr>
+	<td>Maker: </td>
+	<td><%= @makers[:name] %></td>
+      </tr>
+      <tr>
+	<td>Main Category: </td>
+	<td><%= @main_cat[:name] %></td>
+      </tr>
+      <tr>
+	<td>Sub Category: </td>
+	<td><%= @sub_cat[:name] %></td>
+      </tr>
+      <tr>
+	<td>Item Name: </td>
+	<td><%= @items[:name] %></td>
+      </tr>
+      <tr>
+	<td>Specs: </td>
+	<td>
+	  <dl>
+	    <% @spec_keys.each do | key | %>
+	      <dt>
+		<% display_type = session[:specs]["#{key}_display_type"].to_i %>
+		<b><%= key %>:</b> 
+		<%= session[:specs][key] %> 
+		<% if display_type == 0 %> , Dropdown
+		<% elsif display_type == 1 %> , Checkbox
+		<% elsif display_type == 2 %> , Range, <%= session[:specs]["#{key}_metric"] %>
+		<% end %>
+	      </dt>
+	    <% end %>
+	  </dl>
+	</td>
+      </tr>
+      <tr>
+	<td>MSDS Link: </td>
+	<td><%= session[:items][:msds_link] %></td>
+      </tr>
+      <tr>
+	<td>Orange Catalog Link: </td>
+	<td><%= session[:items][:orange_catalog_link] %></td>
+      </tr>
+      <tr>
+	<td>Product Details URL(s): </td>
+	<td><%= session[:items][:details_links] %></td>
+      </tr>
+      <tr>
+	<td>Description: </td>
+	<td><%= session[:items][:description] %></td>
+      </tr>
+      <tr>
+	<td class="btn c_align" colspan="2">
+	  <input type="button" value="Back" class="btn"/>
+	  <input type="submit" value="Submit & Add Shops" class="btn" style="width:150px"/>
+	</td>
+      </tr>	
+  </table>
+  <% end %>
+
+</div> <!-- contents -->
+</div> <!-- wrapper -->

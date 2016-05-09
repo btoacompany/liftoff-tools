@@ -24,33 +24,13 @@ categories:
   12002: Onion
 
 category_items:
-  10001:
+  i_10001:
     cat_name: Mango
     items:
       1: Green Mango
       2: Sweet Mango
-  10002:
+  i_10002:
     cat_name: Orange 
     items:
       3: Sunkist Orange 
       4: Ponkan Orange
-  11001:
-    cat_name: Orange 
-    items:
-      5: Sunkist Orange 
-      6: Ponkan Orange
-  11002:
-    cat_name: Orange 
-    items:
-      7: Sunkist Orange 
-      8: Ponkan Orange
-  12001:
-    cat_name: Orange 
-    items:
-      9: Sunkist Orange 
-      10: Ponkan Orange
-  12002:
-    cat_name: Orange 
-    items:
-      11: Sunkist Orange 
-      12: Ponkan Orange

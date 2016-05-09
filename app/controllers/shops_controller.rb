@@ -16,7 +16,7 @@ class ShopsController < ApplicationController
   end
 
   def edit
-    @shops = Shops.where(:id => params[:id], :delete_flag => 0)
+    @shops = Shops.find(params[:id])
   end
   
   def edit_action

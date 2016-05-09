@@ -1,0 +1,163 @@
+<div id="wrapper">
+<div id="contents">
+  <h3 class="c_align">Edit Product Info</h3>
+  <%= form_tag( "/products/edit/specs", method: "post" ) do %>
+    <input type="hidden" name="product_id" value="<%= @products.id %>" />
+    <table class="center">
+      <tr>
+	<td>Product Name: </td>
+	<td><input type="text" value="<%= @products.name %>" name="name"/></td>
+      </tr>
+      <tr>
+	<td>Image URL: </td>
+	<td><input type="text" value="<%= @products.img_src %>" name="img_src"/></td>
+      </tr>
+      <tr>
+	<td>Maker: </td>
+	<td>
+	  <select name="maker_id" class="maker">
+	    <option value=""></option>
+	    <% @makers.each do | maker | %>
+	      <option value="<%= maker[:id] %>" <% if maker[:id] == @products.maker_id %>
+		selected="selected" <% end %>><%= maker[:name] %></option> 
+	    <% end %>
+	  </select>
+	</td>
+      </tr>
+      <tr>
+	<td>Main Category: </td>
+	<td>
+	  <select name="main_category_id" class="main_category">
+	    <option value=""></option>
+	    <% @main_category.each do | mcat_id, mcat_val | %>
+	      <option value="<%= mcat_id %>" <% if mcat_id.to_i == @products.main_category_id %>
+		selected="selected" <% end %>><%= mcat_val["name"] %></option> 
+	    <% end %>
+	  </select>
+	</td>
+      </tr>
+      <tr>
+	<td>Sub Category: </td>
+	<td>
+	  <select name="category_id" class="sub_category">
+	    <option value=""></option>
+	  </select>
+	</td>
+      </tr>
+      <tr>
+	<td>Item Code: </td>
+	<td>
+	  <select name="item_code" class="items">
+	    <option value=""></option>
+	  </select>
+	</td>
+      </tr>
+      <tr>
+	<td>MSDS Link: </td>
+	<td><input type="text" value="<%= @products.msds_link %>" name="msds_link"/></td>
+      </tr>
+      <tr>
+	<td>Orange Catalog Link: </td>
+	<td><input type="text" value="<%= @products.orange_catalog_link %>" name="orange_catalog_link"/></td>
+      </tr>
+      <tr>
+	<td>Product Details URL(s): </td>
+	<td>
+	  <textarea name="details_links" cols="30" rows="2"><%= @products.details_links %></textarea><br>
+	  <span class='note'>(Separate urls by comma without space)</span>
+	</td>
+      </tr>
+      <tr>
+	<td>Description: </td>
+	<td><textarea name="description" cols="30" rows="4"><%= @products.description %></textarea></td>
+      </tr>
+      <tr>
+	<td class="btn c_align" colspan="2">
+	  <input type="submit" value="Next" class="btn" />
+	</td>
+      </tr>	
+    </table>
+  <% end %>
+
+</div> <!-- contents -->
+</div> <!-- wrapper -->
+
+<script>
+var selMainCat = "<%= @products.main_category_id %>";
+var selSubCat = "<%= @products.category_id %>";
+var selItemCode = "<%= @products.item_code %>";
+
+var categoryObj = { }; //initialize json object for category
+var categoryContents = { };
+var itemsObj = { }; //initialize json object for items
+var itemsContents = { };
+
+<% @categories.each do | cat_id, cat_name | %>
+  var categoryId = "<%= cat_id %>";
+  itemsObj[ categoryId ] = [];
+<% end %>
+
+<% @items.each do | item | %>
+  itemsContents = { "<%= item[:item_code] %>": "<%= item[:name] %>"};
+  itemsObj["<%= item[:category_id] %>"].push(itemsContents);
+<% end %>
+
+<% @main_category.each do | mcat_id, mcat_val | %>
+  var mainCategoryId = "<%= mcat_id %>";
+  categoryObj[ mainCategoryId ] = [] ;
+
+  <% mcat_val["sub_categories"].each do | cat_id, cat_name | %>
+    categoryContents = { "<%= cat_id %>": "<%= cat_name %>" };
+    categoryObj[ mainCategoryId ].push(categoryContents);
+  <% end %>
+<% end %>
+
+setCategoryOptions( selMainCat );
+setItemsOptions( selSubCat );
+
+// set sub category options upon main category change 
+function setCategoryOptions( id ) {
+  var $elSubCat = $(".sub_category");
+  var subCategoryId = "";
+  $elSubCat.empty();
+
+  $.each(categoryObj[id], function( key, val ) {
+    $.each(val, function( catId, catVal) {
+      if ( key == 0 ) { subCategoryId = catId; }
+      if ( catId == selSubCat ) {
+	$elSubCat.append($("<option></option>").attr("value", catId).attr("selected", "selected").text(catVal));
+      } else {
+	$elSubCat.append($("<option></option>").attr("value", catId).text(catVal));
+      }
+    });
+  });
+
+  setItemsOptions( subCategoryId );
+}
+
+function setItemsOptions ( id ) {
+  var $elItems = $(".items");
+  $elItems.empty();
+
+  $.each(itemsObj[id], function( key, val ) {
+    $.each(val, function( itemCode, itemName) {
+      if ( itemCode == selItemCode ) {
+	$elItems.append($("<option></option>").attr("value", itemCode).attr("selected", "selected").text(itemName));
+      } else {
+	$elItems.append($("<option></option>").attr("value", itemCode).text(itemName));
+      }
+    });
+  });
+}
+
+/*---- page actions section ---- */
+$(".main_category").change(function() {
+  var mainCategoryId = $(".main_category").val();
+  setCategoryOptions( mainCategoryId );
+});
+
+$(".sub_category").change(function() {
+  var subCategoryId = $(".sub_category").val();
+  setItemsOptions( subCategoryId );
+});
+</script>

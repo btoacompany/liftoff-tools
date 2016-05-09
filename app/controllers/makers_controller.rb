@@ -17,7 +17,7 @@ class MakersController < ApplicationController
   end
 
   def edit
-    @makers = Makers.where(:id => params[:id], :delete_flag => 0)
+    @makers = Makers.find(params[:id])
   end
   
   def edit_action
