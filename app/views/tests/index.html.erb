@@ -1,14 +1,17 @@
 <div id="wrapper">
 <div id="contents">
+<%= form_tag( root_path, method: "get" ) do %>
   This is a test page...
   <% @tests.each do | t | %>
     <p></p>
-    <p><%= t[:id] %></p>
-    <p><%= t[:name] %></p>
-  <% end %>
-  <% @tests1.each do | t | %>
-    <p><%= t[:lastname] %></p>
     <p><%= t[:firstname] %></p>
+    <p><%= t[:lastname] %></p>
   <% end %>
+  <br>
+  <% (0..4).each do | i | %>
+    <label><input type="checkbox" name="chk[]" value="<%= i %>"> value <%= i %></label>
+  <% end %>
+  <input type="submit" value="Submit" />
+<% end %>
 </div> <!-- contents -->
 </div> <!-- wrapper -->

@@ -1,12 +1,17 @@
-require 'Util.rb'
-
 class TestsController < ApplicationController
   def index
-    main_category = Util.main_category
+    test = TestsMongo.new
+    @tests = [] 
+    params = {
+      :firstname => "elvis",
+      :lastname => "man"
+    }
 
-    @tests = Makers.where(:id => 1)
+    #test.update(params)
 
-    specs = ProductSpecs.new
-    @tests1 = specs.find({:firstname => "john"})
+    if params.present?
+      logger.debug "------"
+      logger.debug params["chk"]
+    end
   end
 end

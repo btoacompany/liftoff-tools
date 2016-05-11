@@ -24,6 +24,8 @@ class MakersController < ApplicationController
     maker = Makers.find(params[:id])
     maker.save_record(params)
 
+    products = Products.where(:maker_id => maker.id).update_all(:maker_name => maker.name)
+
     redirect_to_index 
   end
 

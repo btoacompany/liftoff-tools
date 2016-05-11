@@ -22,6 +22,9 @@ class ShopsController < ApplicationController
   def edit_action
     shop = Shops.find(params[:id])
     shop.save_record(params)
+
+    products = ProductShops.where(:shop_id => shop.id).update_all(:shop_name => shop.name)
+
     redirect_to_index
   end
 

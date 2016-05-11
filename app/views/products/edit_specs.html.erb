@@ -15,21 +15,33 @@
 	  <td><%= spec %>: </td>
 	  <% if @spec_changed == 1 %>
 	    <td><input type="text" value="" name="<%= spec %>" size="15"/></td>
+	    <td>
+	      <select name="<%= spec %>_display_type" class="display_type" data-id="<%= spec %>">
+		<option value="0">Dropdown</option>
+		<option value="1">Checkbox</option>
+		<option value="2">Range</option>
+	      </select>
+	    </td>
+	    <td class="metric">
+	      <input type="text" name="<%= spec %>_metric" class="<%= spec %>_metric"
+	      value="" size="3" style="background-color:#d4d4d4" disabled />
+	    </td>
 	  <% else %>
 	    <td><input type="text" value="<%= @specs[spec][:content] %>" name="<%= spec %>" size="15"/></td>
+
+	    <td>
+	      <select name="<%= spec %>_display_type" class="display_type" data-id="<%= spec %>">
+		<option value="0" <% if @specs[spec][:type].to_i == 0 %> selected <% end %> >Dropdown</option>
+		<option value="1" <% if @specs[spec][:type].to_i == 1 %> selected <% end %> >Checkbox</option> 
+		<option value="2" <% if @specs[spec][:type].to_i == 2 %> selected <% end %> >Range</option>
+	      </select>
+	    </td>
+	    <td class="metric">
+	      <input type="text" name="<%= spec %>_metric" class="<%= spec %>_metric"
+	      value="<%= @specs[spec][:metric] %>" size="3" style="background-color:#d4d4d4" disabled />
+	    </td>
 	  <% end %>
 
-	  <td>
-	    <select name="<%= spec %>_display_type" class="display_type" data-id="<%= spec %>">
-	      <option value="0" <% if @specs[spec][:type].to_i == 0 %> selected <% end %> >Dropdown</option>
-	      <option value="1" <% if @specs[spec][:type].to_i == 1 %> selected <% end %> >Checkbox</option> 
-	      <option value="2" <% if @specs[spec][:type].to_i == 2 %> selected <% end %> >Range</option>
-	    </select>
-	  </td>
-	  <td class="metric">
-	    <input type="text" name="<%= spec %>_metric" class="<%= spec %>_metric"
-	    value="<%= @specs[spec][:metric] %>" size="3" style="background-color:#d4d4d4" disabled />
-	  </td>
 	</tr>
       <% end %>
       <tr>

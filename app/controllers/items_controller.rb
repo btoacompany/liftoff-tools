@@ -19,8 +19,7 @@ class ItemsController < ApplicationController
 
   def create_action
     params[:specs] = specs_fix(params[:specs])
-    item_codes = Items.where(:category_id => params[:category_id], :delete_flag =>
-    0).reverse.first
+    item_codes = Items.where(:category_id => params[:category_id], :delete_flag => 0).reverse.first
 
     params[:item_code] = item_codes.item_code + 1
 

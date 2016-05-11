@@ -15,7 +15,7 @@
 
 #menu-v li
 {
-    background: #FFF url(bg.gif) repeat-x 0 2px;
+    background: #000 repeat-x 0 2px;
     list-style: none; margin: 0; padding: 0;
 }
 #menu-v li a
@@ -24,10 +24,11 @@
     border-top: 1px solid #ccc;
     display: block;
     /*overflow: auto; force hasLayout in IE7 */
-    color: black;
+    color: #fff;
     text-decoration: none;
     line-height:26px;
     padding-left:26px;            
+    font-weight: bold;
 }
 #menu-v ul li a
 {
@@ -36,7 +37,6 @@
                 
 #menu-v li a.arrow:hover
 {
-    background-image:url(arrowon.gif);
     background-repeat: no-repeat;
     background-position: 97% 50%;
 }
@@ -49,10 +49,14 @@
     width: 140px; /*Sub Menu Items width */
     visibility:hidden;
 }
+
+#menu-v li ul a 
+{
+  color: #000; 
+}
         
 #menu-v a.arrow
 {
-    background-image:url(arrow.gif);
     background-repeat: no-repeat;
     background-position: 97% 50%;
 }
@@ -62,12 +66,12 @@
 }
 #menu-v ul li
 {
-    background: rgba(255, 255, 255, 0.86);
+    background: rgba(255, 255, 255, 1);
     background-image:none;
 }
 #menu-v ul li:hover, #menu-v ul li.onhover
 {
-    background: #FFF;
+    background: #E6E6E6;
     background-image:none;
 }
         

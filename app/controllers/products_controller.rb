@@ -10,24 +10,75 @@ class ProductsController < ApplicationController
   end
 
   def index
-    @temp = Products.where(:delete_flag => 0)
-
-    item_code="1000101" #TODO: get value later
+    item_code = params[:item].present? ? params[:item] : "1000101"
     items = Items.where(:item_code => item_code).first
-    @item_specs = items[:specs].split(",")
+    item_specs = items[:specs].split(",")
+    
+    spec_exist = 0
+    spec_params = {}
+    @specs = {}
 
-=begin
-    products = Products.where(:delete_flag => 0)
-    product_specs = ProductSpecs.new
-    data = {}
-    @products = []
+    item_specs.each do | spec |
+      
+      #get all unique contents per spec on the selected item
+      ps = ProductSpecs.new
+      @specs[spec] = ps.distinct(
+	"specs.#{spec}.content", 
+	{:item_code => item_code.to_s, :delete_flag => 0}
+      )
 
-    products.each do | product |
-      specs = product_specs.find(:product_id => product[:id])
-      specs.each do | s |
+      #check if search by spec was triggered
+      if (params[spec.to_sym].present?)
+	spec_exist = 1
+	spec_params["specs.#{spec}.content"] = {
+	  :specs => params[spec],
+	  :type => 0 #TODO: should come from items table display type
+	}
       end
     end
-=end    
+
+    params.merge!({:item_code => item_code})
+
+    #get all product info
+    products = {} 
+    product_ids = []
+    if (params[:keyword].present?) 
+      products = Products.search_by_keyword(params)
+    else
+      products = Products.search(params)
+      
+      if ( spec_exist == 1 )
+	ps = ProductSpecs.new
+	ps_results = ps.search({:item_code => item_code, :specs => spec_params})
+
+	product_ids = products.map{ | res | res[:id] }
+	spec_product_ids = ps_results.map{ | res | res[:product_id] }
+	product_ids = product_ids & spec_product_ids
+
+	products = products.select {|k,v| product_ids.include?(k[:id])}
+      end
+    end
+
+    #merge product info with specs info and save it in an instance variable
+    @products = [] 
+    products.each do | product |
+      ps = ProductSpecs.new
+      ps_results = ps.find({:product_id => product[:id]}).first
+
+      contents = {
+	:product_id => product[:id],
+	:name	    => product[:name],
+	:maker_name => product[:maker_name],
+	:img_src    => product[:img_src],
+	:description  => product[:description],
+	:msds_link    => product[:msds_link],
+	:orange_catalog_link  => product[:orange_catalog_link],
+	:details_links	=> product[:details_links],
+	:specs	    => ps_results[:specs]
+      }
+
+      @products << contents
+    end
   end
 
   def create
@@ -46,36 +97,7 @@ class ProductsController < ApplicationController
   def create_shops
     @shops = Shops.where(:delete_flag => 0)
 
-    #--for saving product info and specs--
-    product_params = session[:items].symbolize_keys
-    product = Products.new
-    product.save_record(product_params)
-    @product_id = product.id
-
-    product_specs = ProductSpecs.new
-    spec_params = session[:specs]
-    spec_keys = spec_params["spec_keys"].split(",")
-    specs_info = {}
-
-    spec_keys.each do | key |
-      specs_info[key] = {
-	:content => spec_params[key],
-	:type => spec_params["#{key}_display_type"],
-      }
-
-      if (spec_params["#{key}_display_type"].to_i == 2)
-	specs_info[key].merge!({:metric => spec_params["#{key}_metric"]})
-      end
-    end
-
-    item_code = product_params[:item_code]
-    spec_params.merge!({
-      :product_id => @product_id,
-      :item_code => item_code,
-      :specs => specs_info
-    })
-
-    product_specs.save(spec_params)
+    create_info_and_specs
   end
 
   def create_action
@@ -131,6 +153,10 @@ class ProductsController < ApplicationController
   def delete_action
     product = Products.find(params[:id])
     product.delete_record
+
+    ProductShops.where(:product_id => params[:id], :delete_flag => 0).update_all(:delete_flag => 1)
+    product_specs = ProductSpecs.new
+    product_specs.update({:product_id => params[:id], :delete_flag => 1})
     redirect_to_index 
   end
 
@@ -146,6 +172,8 @@ class ProductsController < ApplicationController
     session[:specs] = params
     
     @makers	= Makers.where(:id => session[:items][:maker_id]).first
+    session[:items].merge!({ :maker_name => @makers.name })
+
     @items	= Items.where(:item_code => session[:items][:item_code]).first
     @main_cat	= MainCategory.where(:main_category_id => session[:items][:main_category_id]).first
     @sub_cat	= Category.where(:category_id => session[:items][:category_id]).first
@@ -154,33 +182,56 @@ class ProductsController < ApplicationController
     session[:items][:description].strip!
   end
 
+  def create_info_and_specs
+    product_params = session[:items].symbolize_keys
+    item_code = product_params[:item_code]
+
+    product = Products.new
+    product.save_record(product_params)
+    @product_id = product.id
+
+    spec_params = set_spec_contents(item_code)
+
+    product_specs = ProductSpecs.new
+    product_specs.save(spec_params)
+  end
+
   def update_info_and_specs(product_params)
     product = Products.find(@product_id)
     product.save_record(product_params)
+    item_code = product_params[:item_code]
 
+    spec_params = set_spec_contents(item_code)
+
+    product_specs = ProductSpecs.new
+    product_specs.update(spec_params)
+  end
+
+  def set_spec_contents(item_code)
     spec_params = session[:specs]
     spec_keys = spec_params["spec_keys"].split(",")
     specs_info = {}
 
     spec_keys.each do | key |
+      type = spec_params["#{key}_display_type"].to_i
+      metric = spec_params["#{key}_metric"]
+      content = (type == 2) ? spec_params[key].to_i : spec_params[key] 
+
       specs_info[key] = {
-	:content => spec_params[key],
-	:type => spec_params["#{key}_display_type"],
+	:content => content,
+	:type => type,
       }
 
-      if (spec_params["#{key}_display_type"].to_i == 2)
-	specs_info[key].merge!({:metric => spec_params["#{key}_metric"]})
-      end
+      specs_info[key].merge!({:metric => metric}) if (type == 2)
     end
 
     spec_params.merge!({
       :product_id => @product_id,
-      :item_code => product_params[:item_code],
+      :item_code => item_code,
       :specs => specs_info
     })
 
-    product_specs = ProductSpecs.new
-    product_specs.update(spec_params)
+    return spec_params
   end
 
   def redirect_to_index

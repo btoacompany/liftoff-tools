@@ -11,8 +11,8 @@ class Mongolib
     @mongo[collection].find(cond)
   end
 
-  def self.distinct( collection, key )
-    @mongo[collection].find.distinct(key)
+  def self.distinct( collection, field, cond = {})
+    @mongo[collection].find(cond).distinct(field)
   end
 
   def self.save( collection, cond = {} )
@@ -20,7 +20,6 @@ class Mongolib
   end
 
   def self.update( collection, cond = {}, params = {} )
-    @mongo[collection].find(cond).update_one(params)
+    @mongo[collection].find(cond).update_many({'$set' => params})
   end
-
 end
