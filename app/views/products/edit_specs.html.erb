@@ -8,40 +8,23 @@
 	<th class="c_align">Spec</th>
 	<th>Details</th>
 	<th>Display Type</th>
-	<th class="metric">Metric</th>
       </tr>
-      <% @item_specs.each do | spec | %>
+      <% @item_specs.each_with_index do | spec, i | %>
 	<tr class="specs">
-	  <td><%= spec %>: </td>
+	  <td class="c_align"><b><%= spec %> <%= "(#{@metric[i]})" if @metric[i]!="nil" %>:</b></td>
+
 	  <% if @spec_changed == 1 %>
 	    <td><input type="text" value="" name="<%= spec %>" size="15"/></td>
-	    <td>
-	      <select name="<%= spec %>_display_type" class="display_type" data-id="<%= spec %>">
-		<option value="0">Dropdown</option>
-		<option value="1">Checkbox</option>
-		<option value="2">Range</option>
-	      </select>
-	    </td>
-	    <td class="metric">
-	      <input type="text" name="<%= spec %>_metric" class="<%= spec %>_metric"
-	      value="" size="3" style="background-color:#d4d4d4" disabled />
-	    </td>
 	  <% else %>
 	    <td><input type="text" value="<%= @specs[spec][:content] %>" name="<%= spec %>" size="15"/></td>
-
-	    <td>
-	      <select name="<%= spec %>_display_type" class="display_type" data-id="<%= spec %>">
-		<option value="0" <% if @specs[spec][:type].to_i == 0 %> selected <% end %> >Dropdown</option>
-		<option value="1" <% if @specs[spec][:type].to_i == 1 %> selected <% end %> >Checkbox</option> 
-		<option value="2" <% if @specs[spec][:type].to_i == 2 %> selected <% end %> >Range</option>
-	      </select>
-	    </td>
-	    <td class="metric">
-	      <input type="text" name="<%= spec %>_metric" class="<%= spec %>_metric"
-	      value="<%= @specs[spec][:metric] %>" size="3" style="background-color:#d4d4d4" disabled />
-	    </td>
 	  <% end %>
 
+	  <td>
+	    <%= " Dropdown " if @type[i] == "0" %>
+	    <%= " Checkbox " if @type[i] == "1" %>
+	    <%= " Range " if @type[i] == "2" %>
+	    <input type="hidden" name="<%= spec %>_display_type" value="<%= @type[i] %>"/>
+	  </td>
 	</tr>
       <% end %>
       <tr>

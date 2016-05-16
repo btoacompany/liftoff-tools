@@ -7,6 +7,8 @@ class Items < ActiveRecord::Base
     self.item_code  = params[:item_code]
     self.name	    = params[:name]
     self.specs	    = params[:specs]
+    self.display_type = params[:display_type]
+    self.metric	      = params[:metric]
     self.description  = params[:description]
     self.category_id  = params[:category_id]
     self.main_category_id  = params[:main_category_id]

@@ -16,6 +16,10 @@
 	<td><%= @makers[:name] %></td>
       </tr>
       <tr>
+	<td>Price: </td>
+	<td><%= session[:items][:price_min] %></td>
+      </tr>
+      <tr>
 	<td>Main Category: </td>
 	<td><%= @main_cat[:name] %></td>
       </tr>
@@ -32,15 +36,7 @@
 	<td>
 	  <dl>
 	    <% @spec_keys.each do | key | %>
-	      <dt>
-		<% display_type = session[:specs]["#{key}_display_type"].to_i %>
-		<b><%= key %>:</b> 
-		<%= session[:specs][key] %> 
-		<% if display_type == 0 %> , Dropdown
-		<% elsif display_type == 1 %> , Checkbox
-		<% elsif display_type == 2 %> , Range, <%= session[:specs]["#{key}_metric"] %>
-		<% end %>
-	      </dt>
+	      <dt><b><%= key %>:</b> <%= session[:specs][key] %></dt>
 	    <% end %>
 	  </dl>
 	</td>
@@ -63,8 +59,7 @@
       </tr>
       <tr>
 	<td class="btn c_align" colspan="2">
-	  <input type="button" value="Back" class="btn"/>
-	  <input type="submit" value="Submit & Add Shops" class="btn" style="width:150px"/>
+	  <input type="submit" value="Submit & Add Shops" class="btn" style="height:35px; width:150px"/>
 	</td>
       </tr>	
   </table>

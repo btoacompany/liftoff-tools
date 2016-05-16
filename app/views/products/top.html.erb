@@ -1,0 +1,35 @@
+<div id="wrapper">
+<div id="container">
+  <div id="side_menu">
+    <h3>カテゴリー</h3>
+    <ul id="menu-v">
+    <% @main_category.each do | mcat_id, mcat_val | %>
+      <li>
+	<a href="/products"><%= mcat_val %></a>
+	<ul>
+	  <% @categories[mcat_id].each do | cat_id, cat_val | %>
+	    <li><a href="/products/list/<%= cat_id %>"><%= cat_val %></a></li>
+	  <% end %>
+	</ul>
+      </li>
+    <% end %>
+  </div>
+
+  <div id="content_products">
+    <div class="c_align">
+      <h2>Products Tool</h2>
+      <a href="/products/create" class="a_btn">Add New Product</a>
+    </div><br>
+
+    <div class="search_box">
+    <%= form_tag( "/products", method: "get", id: "keyword_form" ) do %>
+      <div class="c_align">
+	<input type="text" name="keyword" class="keyword_input" placeholder="Type in keyword..." 
+	  value="<%= params[:keyword] if params[:keyword].present? %>"/>
+	<input type="submit" class="keyword_search_btn" value="Search" />
+      </div>
+    <% end %> 
+    </div>  
+  </div> <!-- content_shop -->
+</div> <!-- container -->
+</div> <!-- wrapper -->

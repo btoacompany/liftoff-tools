@@ -17,15 +17,26 @@
       </tr>
       <% @items.each do | item | %>
 	<% cat_id = item[:category_id] %>
+	<% mcat_id = item[:main_category_id] %>
 	<tr class="item_<%= item[:id] %>">
 	  <td><%= item[:item_code] %></td>
 	  <td><%= item[:name] %></td>
-	  <td><%= @categories[cat_id] %></td>
-	  <td class="l_align" width="200"><%= item[:specs] %></td>
-	  <td class="l_align" width="250"><%= item[:description][0..50] %>...</td>
+	  <td><%= @categories[mcat_id][cat_id] %></td>
+	  <td class="l_align" width="150">
+	    <% item[:specs].split(",").each_with_index do | spec, i | %>
+	      <% type = item[:display_type].split(",") %>
+	      <% metric = item[:metric].split(",") %>
+	      <b><%= spec %></b> (
+		<%= "Dropdown" if type[i] == "0" %>
+		<%= "Checkbox" if type[i] == "1" %>
+		<%= "Range" if type[i] == "2" %><%= ", #{metric[i]}" if metric[i]!="nil" %>
+	      ) <br>
+	    <% end %>
+	  </td>
+	  <td class="l_align" width="150"><%= item[:description][0..50] %>...</td>
 	  <td class="c_align">
-	    <input type="button" class="edit_item" data-id="<%= item[:id] %>" value="edit" /> | 
-	    <input type="button" class="delete_item" data-id="<%= item[:id] %>" value="del" />
+	    <input type="button" class="edit_item" data-id="<%= item[:id] %>" value="E" /> | 
+	    <input type="button" class="delete_item" data-id="<%= item[:id] %>" value="X" />
 	  </td>
 	</tr>
       <% end %>

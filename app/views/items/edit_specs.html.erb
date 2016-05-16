@@ -1,0 +1,76 @@
+<div id="wrapper">
+<div id="contents">
+  <h3 class="c_align">Add Specs</h3>
+  <%= form_tag( "/items/edit_action", method: "post" ) do %>
+    <input type="hidden" name="spec_keys" value="<%= @spec_keys %>" />
+    <table class="center">
+      <tr>
+	<th class="c_align">Spec</th>
+	<th>Display Type</th>
+	<th class="metric">Metric</th>
+      </tr>
+      <% @spec_keys.each_with_index do | spec, i | %>
+	<tr class="specs">
+	  <td><%= spec %>: </td>
+	  <% if @spec_changed == 1 %>
+	    <td>
+	      <select name="display_type[]" class="display_type" data-id="<%= spec %>">
+		<option value="0">Dropdown</option>
+		<option value="1">Checkbox</option>
+		<option value="2">Range</option>
+	      </select>
+	    </td>
+	    <td class="metric">
+	      <input type="text" name="metric[]" class="<%= spec %>_metric" value="" size="3"/>
+	    </td>
+	  <% else %>
+	    <td>
+	      <select name="display_type[]" class="display_type" data-id="<%= spec %>">
+		<option value="0" <% if @type[i].to_i == 0 %> selected <% end %> >Dropdown</option>
+		<option value="1" <% if @type[i].to_i == 1 %> selected <% end %> >Checkbox</option> 
+		<option value="2" <% if @type[i].to_i == 2 %> selected <% end %> >Range</option>
+	      </select>
+	    </td>
+	    <td class="metric">
+	      <input type="text" name="metric[]" class="<%= spec %>_metric" value="<%= @metric[i] %>" size="3" />
+	    </td>
+	  <% end %>
+
+	</tr>
+      <% end %>
+      <tr>
+	<td class="btn c_align" colspan="3">
+	  <input type="submit" value="Confirm" class="btn" />
+	</td>
+      </tr>	
+    </table>
+  <% end %>
+</div> <!-- contents -->
+</div> <!-- wrapper -->
+
+<script>
+$(".specs .display_type").each(function() {
+  displayType = $(this).find(":selected").val();
+  spec = $(this).attr("data-id");
+
+  setMetric(displayType, spec);
+});
+
+$(".specs .display_type").change(function() {
+  displayType = $(this).val();
+  spec = $(this).attr("data-id");
+
+  setMetric(displayType, spec);
+});
+
+function setMetric (displayType, spec) {
+  var metricClass = "." + spec + "_metric";
+
+  if ( displayType == 2 ) {
+    $(metricClass).show().focus();
+  } else {
+    $(metricClass).hide();
+    $(metricClass).val("");
+  }
+}
+</script>

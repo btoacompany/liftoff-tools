@@ -5,21 +5,32 @@ class ProductsController < ApplicationController
 
   def init 
     c = Category.new
-    @main_category = c.get_main_category
-    @categories = c.get_categories
+    @main_category = c.get_main_category2
+    @categories = c.get_categories2
+  end
+
+  def top
+  end
+
+  def items_list
+    @cat_id = params[:cat_id]
+    @items = Items.where(:category_id => @cat_id, :delete_flag => 0)
   end
 
   def index
     item_code = params[:item].present? ? params[:item] : "1000101"
-    items = Items.where(:item_code => item_code).first
-    item_specs = items[:specs].split(",")
-    
+    @items = Items.where(:category_id => params[:cat_id])
+    @item = Items.where(:item_code => item_code).first
+    item_specs = @item[:specs].split(",")
+
+    @type = @item[:display_type].split(",")
+    @metric = @item[:metric].split(",")
+
     spec_exist = 0
     spec_params = {}
     @specs = {}
 
-    item_specs.each do | spec |
-      
+    item_specs.each_with_index do | spec, i |
       #get all unique contents per spec on the selected item
       ps = ProductSpecs.new
       @specs[spec] = ps.distinct(
@@ -32,21 +43,21 @@ class ProductsController < ApplicationController
 	spec_exist = 1
 	spec_params["specs.#{spec}.content"] = {
 	  :specs => params[spec],
-	  :type => 0 #TODO: should come from items table display type
+	  :type => @type[i].to_i
 	}
       end
     end
-
     params.merge!({:item_code => item_code})
 
     #get all product info
     products = {} 
     product_ids = []
+
     if (params[:keyword].present?) 
       products = Products.search_by_keyword(params)
     else
       products = Products.search(params)
-      
+
       if ( spec_exist == 1 )
 	ps = ProductSpecs.new
 	ps_results = ps.search({:item_code => item_code, :specs => spec_params})
@@ -54,12 +65,11 @@ class ProductsController < ApplicationController
 	product_ids = products.map{ | res | res[:id] }
 	spec_product_ids = ps_results.map{ | res | res[:product_id] }
 	product_ids = product_ids & spec_product_ids
-
 	products = products.select {|k,v| product_ids.include?(k[:id])}
       end
     end
 
-    #merge product info with specs info and save it in an instance variable
+    #merge product info with specs info and append it in an instance array variable
     @products = [] 
     products.each do | product |
       ps = ProductSpecs.new
@@ -76,7 +86,6 @@ class ProductsController < ApplicationController
 	:details_links	=> product[:details_links],
 	:specs	    => ps_results[:specs]
       }
-
       @products << contents
     end
   end
@@ -96,7 +105,6 @@ class ProductsController < ApplicationController
 
   def create_shops
     @shops = Shops.where(:delete_flag => 0)
-
     create_info_and_specs
   end
 
@@ -142,7 +150,6 @@ class ProductsController < ApplicationController
   
   def edit_action
     product_shops = ProductShops.find(params[:id].to_i)
-    
     if (params[:delete_flag].to_i == 1)
       product_shops.delete_record 
     else
@@ -162,9 +169,11 @@ class ProductsController < ApplicationController
 
   def set_specs_page
     session[:items] = params
-    @items = Items.where(:item_code => params[:item_code])
-    @spec_keys = @items[0][:specs] 
-    @item_specs = @items[0][:specs].split(",")
+    @items = Items.where(:item_code => params[:item_code]).first
+    @spec_keys = @items[:specs] 
+    @item_specs = @items[:specs].split(",")
+    @type = @items[:display_type].split(",")
+    @metric = @items[:metric].split(",")
   end
 
   def set_confirm_page
@@ -191,7 +200,6 @@ class ProductsController < ApplicationController
     @product_id = product.id
 
     spec_params = set_spec_contents(item_code)
-
     product_specs = ProductSpecs.new
     product_specs.save(spec_params)
   end
@@ -214,15 +222,8 @@ class ProductsController < ApplicationController
 
     spec_keys.each do | key |
       type = spec_params["#{key}_display_type"].to_i
-      metric = spec_params["#{key}_metric"]
       content = (type == 2) ? spec_params[key].to_i : spec_params[key] 
-
-      specs_info[key] = {
-	:content => content,
-	:type => type,
-      }
-
-      specs_info[key].merge!({:metric => metric}) if (type == 2)
+      specs_info[key] = { :content => content }
     end
 
     spec_params.merge!({
@@ -230,7 +231,6 @@ class ProductsController < ApplicationController
       :item_code => item_code,
       :specs => specs_info
     })
-
     return spec_params
   end
 

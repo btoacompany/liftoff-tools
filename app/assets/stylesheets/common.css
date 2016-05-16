@@ -197,18 +197,18 @@ a img {
 /*** SIDE MENU ***/
 #side_menu {
   float: left;
-  width: 120px;
+  width: 200px;
   padding: 5px;
 }
 
 #content_products {
   float: right;
-  width: 760px;
+  width: 680px;
   padding: 5px 10px;
 }
 
 #content_products .tbl_results {
-  width: 760px;
+  width: 680px;
   border-collapse: collapse;
   font-size: 9pt;
 }
@@ -310,7 +310,7 @@ hr.dotted {
   background-color: #FFF;
   display: block;
   overflow: hidden;
-  padding: 10px;
+  padding: 10px 10px 100px 10px;
   zoom: 1;
   line-height: 1.7em;
   font-size: 11pt;

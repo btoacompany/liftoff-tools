@@ -1,60 +1,62 @@
 <div id="wrapper">
 <div id="contents">
   <h3 class="c_align">Update Item Info</h3>
-  <%= form_tag( "/items/edit_action", method: "post" ) do %>
+  <%= form_tag( "/items/edit/specs", method: "post" ) do %>
     <input type="hidden" name="id" value="<%= params[:id] %>" />
+    <input type="hidden" name="item_code" value="<%= @item.item_code %>" />
+    <input type="hidden" name="old_specs" value="<%= @item.specs %>" />
     <input type="hidden" name="category_id" value="<%= @item.category_id %>" />
     <input type="hidden" name="main_category_id" value="<%= @item.main_category_id %>" />
 
     <table class="center">
-	<% @main_category_id = @item.category_id.to_s[0..1].to_i %>
-	<tr>
-	  <td>Item Code: </td>
-	  <td><%= @item.item_code %></td>
-	</tr>
-	<tr>
-	  <td>Item Name: </td>
-	  <td><input type="text" value="<%= @item.name %>" name="name"/></td>
-	</tr>
-	<tr>
-	  <td>Main Category: </td>
-	  <td>
-	    <select name="main_category_id" class="main_category" disabled >
-	      <option value=""></option>
-	      <% @main_category.each do | mcat_id, mcat_val | %>
-		<option value="<%= mcat_id %>" 
-		  <% if mcat_id == @main_category_id %> selected="selected" <% end %>><%= mcat_val["name"] %></option>
-	      <% end %>
-	    </select>
-	  </td>
-	</tr>
-	<tr>
-	  <td>Sub Category: </td>
-	  <td>
-	    <select name="category_id" class="sub_category" disabled >
-	      <% @main_category[@main_category_id]["sub_categories"].each do | cat_id, cat_name | %>
-		<option value="<%= cat_id %>" 
-		  <% if @item.category_id == cat_id %> selected <% end %>><%= cat_name %></option>
-	      <% end %>
-	    </select>
-	  </td>
-	</tr>
-	<tr>
-	  <td>Specs: </td>
-	  <td>
-	    <input type="text" value="<%= @item.specs %>" name="specs"/><br>
-	    <span class='note'>Separate specs by comma without space (Ex: height,color...) </span>
-	  </td>
-	</tr>
-	<tr>
-	  <td>Description: </td>
-	  <td><textarea name="description" cols="35" rows="5"><%= @item.description %></textarea></td>
-	</tr>
-	<tr>
-	  <td class="btn c_align" colspan="2">
-	    <input type="submit" value="Submit" class="btn" />
-	  </td>
-	</tr>	
+      <% @main_category_id = @item.category_id.to_s[0..1].to_i %>
+      <tr>
+	<td>Item Code: </td>
+	<td><%= @item.item_code %></td>
+      </tr>
+      <tr>
+	<td>Main Category: </td>
+	<td>
+	  <select name="main_category_id" class="main_category" disabled >
+	    <option value=""></option>
+	    <% @main_category.each do | mcat_id, mcat_val | %>
+	      <option value="<%= mcat_id %>" 
+		<% if mcat_id == @main_category_id %> selected="selected" <% end %>><%= mcat_val["name"] %></option>
+	    <% end %>
+	  </select>
+	</td>
+      </tr>
+      <tr>
+	<td>Sub Category: </td>
+	<td>
+	  <select name="category_id" class="sub_category" disabled >
+	    <% @categories[@main_category_id].each do | cat_id, cat_name | %>
+	      <option value="<%= cat_id %>" 
+		<% if @item.category_id == cat_id %> selected <% end %>><%= cat_name %></option>
+	    <% end %>
+	  </select>
+	</td>
+      </tr>
+      <tr>
+	<td>Item Name: </td>
+	<td><input type="text" value="<%= @item.name %>" name="name"/></td>
+      </tr>
+      <tr>
+	<td>Specs: </td>
+	<td>
+	  <input type="text" value="<%= @item.specs %>" name="specs"/><br>
+	  <span class="note">Separate specs by comma without space (Ex: height,color...) </span>
+	</td>
+      </tr>
+      <tr>
+	<td>Description: </td>
+	<td><textarea name="description" cols="35" rows="5"><%= @item.description %></textarea></td>
+      </tr>
+      <tr>
+	<td class="btn c_align" colspan="2">
+	  <input type="submit" value="Next" class="btn" />
+	</td>
+      </tr>	
     </table>
   <% end %>
 </div> <!-- contents -->
@@ -70,7 +72,7 @@ var categoryObj = { }; //initialize json object for category
   var mainCategoryId = "<%= mcat_id %>";
   categoryObj[ mainCategoryId ] = [] ;
 
-  <% mcat_val["sub_categories"].each do | cat_id, cat_name | %>
+  <% @categories[mcat_id].each do | cat_id, cat_name | %>
     obj = { "<%= cat_id %>": "<%= cat_name %>" };
     categoryObj[ mainCategoryId ].push(obj);
   <% end %>

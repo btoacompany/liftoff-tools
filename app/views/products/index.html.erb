@@ -3,18 +3,9 @@
   <div id="side_menu">
     <h3>カテゴリー</h3>
     <ul id="menu-v">
-    <% @main_category.each do | mcat_id, mcat_val | %>
+    <% @items.each do | item | %>
       <li>
-	<a href="/products/?mcat_id=<%= mcat_id %>"><%= mcat_val["name"] %></a>
-	<ul>
-	  <% mcat_val["sub_categories"].each do | cat_id, cat_val | %>
-	    <li>
-	      <a href="/products/?cat_id=<%= cat_id %>"><%= cat_val %></a>
-	      <ul>
-	      </ul>
-	    </li>
-	  <% end %>
-	</ul>
+	<a href="/products/list/<%= params[:cat_id] %>/<%= item[:item_code] %>"><%= item[:name] %></a>
       </li>
     <% end %>
   </div>
@@ -24,10 +15,13 @@
       <h2>Products Tool</h2>
       <a href="/products/create" class="a_btn">Add New Product</a>
     </div>
+    
+    <div class="item_name"><h3><%= @item[:name] %></h3></div>
+    <div class="item_desc"><%= @item[:description] %> </div>
 
     <div class="search_box">
       <h3>詳細検索</h3><hr>
-      <%= form_tag( "/products", method: "get", id: "keyword_form" ) do %>
+      <%= form_tag( "/products/list/#{params[:cat_id]}/#{params[:item_code]}", method: "get", id: "keyword_form" ) do %>
 	<div class="c_align">
 	  <input type="text" name="keyword" class="keyword_input" placeholder="Type in keyword..." 
 	    value="<%= params[:keyword] if params[:keyword].present? %>"/>
@@ -45,18 +39,31 @@
 	    <td class="label">商品名</td>
 	    <td><input type="text" name="product" value="<%= params[:product] if params[:product].present? %>" size="52"/></td>
 	  </tr>
+	  <% i = 0 %>
 	  <% @specs.each do | spec, contents | %>
 	    <tr>
 	      <td class="label"><%= spec %></td>
 	      <td>
-		<select name="<%= spec %>" class="spec">
-		  <option value="">-</option>
+		<% if @type[i].to_i == 0 %>
+		  <select name="<%= spec %>" class="spec">
+		    <option value="">-</option>
+		    <% contents.each do | content | %>
+		      <option value="<%= content %>"><%= content %></option>
+		    <% end %>
+		  </select>
+		<% elsif @type[i].to_i == 1 %>
 		  <% contents.each do | content | %>
-		    <option value="<%= content %>"><%= content %></option>
+		    <input type="checkbox" name="<%= spec %>[]" value="<%= content %>"/>
+		    <%= content %>
 		  <% end %>
-		</select>
+		<% elsif @type[i].to_i == 2 %>
+		    <input type="input" name="<%= spec %>[]" value="" size="3"/> ~ 
+		    <input type="input" name="<%= spec %>[]" value="" size="3"/>
+		    <%= @metric[i] %>
+		<% end %>
 	      </td>
 	    </tr>
+	    <% i += 1 %>
 	  <% end %>
 	  <tr>
 	    <td colspan="2" align="center">
@@ -65,7 +72,7 @@
 	  </tr>
 	</table>
       <% end %>
-    </div><br>
+    </div>
 
     <div class="search_results">
       <h3 align="left">
@@ -78,13 +85,13 @@
 
       <% @products.each_with_index do | item, i | %>
 	<table class="tbl_results" border="0">
-	  <tr class="item_<%= item[:id] %>">
+	  <tr class="item_<%= item[:product_id] %>">
 	    <td class="col1">
-	      <input type="button" class="delete_item" data-id="<%= item[:id] %>" value="x" />
-	      <p class="img"><a href="/products/<%= item[:id] %>/edit"><%= image_tag item[:img_src], width: "100", height: "100", id: "item_img" %></a><p>
+	      <input type="button" class="delete_item" data-id="<%= item[:product_id] %>" value="x" />
+	      <p class="img"><a href="/products/<%= item[:product_id] %>/edit"><%= image_tag item[:img_src], width: "100", height: "100", id: "item_img" %></a><p>
 	    </td>
 	    <td class="col2">
-	      <p class="name"><a href="/products/<%= item[:id] %>/edit"><%= item[:name] %></a></p>
+	      <p class="name"><a href="/products/<%= item[:product_id] %>/edit"><%= item[:name] %></a></p>
 	      <p class="maker_name"><b><%= item[:maker_name] %></b></p>
 	      <p class="specs">
 	      <% item[:specs].each do | k, v| %>

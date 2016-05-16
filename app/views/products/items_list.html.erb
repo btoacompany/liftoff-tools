@@ -1,0 +1,33 @@
+<div id="wrapper">
+<div id="container">
+  <div id="side_menu">
+    <h3>カテゴリー</h3>
+    <ul id="menu-v">
+    <% @items.each do | item | %>
+      <li>
+	<a href="/products/list/<%= @cat_id %>/<%= item[:item_code] %>"><%= item[:name] %></a>
+      </li>
+    <% end %>
+  </div>
+
+  <div id="content_products">
+    <div class="c_align">
+      <h2>Products Tool</h2>
+      <a href="/products/create" class="a_btn">Add New Product</a>
+    </div>
+    <div class="search_results">
+      <h3 align="left">
+	<span class="results_count">(<%= @items.count %> total items)</span>
+      </h3><hr>
+
+      <% if @items.count == 0 %>
+	<span class="no_results">No results</span>
+      <% end %>
+
+      <% @items.each_with_index do | item, i | %>
+	<p><a href="/products/list/<%= @cat_id %>/<%= item[:item_code] %>"><%= item[:name] %></a></p>
+      <% end %>
+    </div>
+  </div> <!-- content_shop -->
+</div> <!-- container -->
+</div> <!-- wrapper -->

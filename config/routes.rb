@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
-  root 'tests#index'
+  root 'top#index'
+
+  #for test
+  get '/test' => 'tests#index'
     
   # product tools
-  get	'/products'			=> 'products#index'
+  get	'/products'			=> 'products#top'
+  get	'/products/list/:cat_id'	=> 'products#items_list'
+  get	'/products/list/:cat_id/:item'	=> 'products#index'
   get	'/products/create'		=> 'products#create'
   post	'/products/create/specs'	=> 'products#create_specs'
   post	'/products/create/confirm'	=> 'products#create_confirm'
@@ -35,8 +40,10 @@ Rails.application.routes.draw do
   # items tools
   get	'/items/'			=> 'items#index'
   get	'/items/create'			=> 'items#create'
-  get	'/items/:id/edit'		=> 'items#edit'
+  post	'/items/create/specs'		=> 'items#create_specs'
   post	'/items/create_action'		=> 'items#create_action'
+  get	'/items/:id/edit'		=> 'items#edit'
+  post	'/items/edit/specs'		=> 'items#edit_specs'
   post	'/items/edit_action'		=> 'items#edit_action'	
   post	'/items/delete_action'		=> 'items#delete_action'
 

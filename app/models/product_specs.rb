@@ -12,14 +12,23 @@ class ProductSpecs
     search_params = { :item_code => params[:item_code] }
 
     params[:specs].each do | k, v |
-      type = v[:type] #TODO: get type from items
+      type = v[:type]
 
       if (type == 0)
 	search_params.merge!({k => v[:specs]})
       elsif (type == 1)
-	search_params.merge!({k => {'$gte': v[:specs].to_i, '$lte': 900}.stringify_keys})
+	search_params.merge!(k => {"$in": v[:specs]}.stringify_keys)
       elsif (type == 2)
-	search_params.merge!(k => {"$in": ["#{v[:specs]}"]}.stringify_keys)
+	unless (v[:specs].all?(&:empty?))
+	  min = v[:specs][0].present? ? v[:specs][0].to_i : nil
+	  max = v[:specs][1].present? ? v[:specs][1].to_i : nil
+
+	  range = {'$gte': min, '$lte': max}.stringify_keys
+	  range = {'$gte': min}.stringify_keys if max.nil?
+	  range = {'$lte': max}.stringify_keys if min.nil?
+
+	  search_params.merge!({k => range})
+	end
       end
     end
     
@@ -55,6 +64,7 @@ class ProductSpecs
     else
       params = {
 	:specs => params[:specs],
+	:item_code => params[:item_code],
 	:update_time => t,
       }
     end

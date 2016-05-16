@@ -1,47 +1,49 @@
 <div id="wrapper">
 <div id="contents">
   <h3 class="c_align">Create New Item</h3>
-  <%= form_tag( "/items/create_action", method: "post" ) do %>
+  <%= form_tag( "/items/create/specs", method: "post" ) do %>
   <table class="center">
-      <tr>
-	<td>Item Name: </td>
-	<td><input type="text" value="" name="name"/></td>
-      </tr>
-      <tr>
-	<td>Main Category: </td>
-	<td>
-	  <select name="main_category_id" class="main_category">
-	    <option value=""></option>
-	    <% @main_category.each do | mcat_id, mcat_val | %>
-	      <option value="<%= mcat_id %>"><%= mcat_val["name"] %></option>
-	    <% end %>
-	  </select>
-	</td>
-      </tr>
-      <tr>
-	<td>Sub Category: </td>
-	<td>
-	  <select name="category_id" class="sub_category">
-	    <option value=""></option>
-	  </select>
-	</td>
-      </tr>
-      <tr>
-	<td>Specs: </td>
-	<td>
-	  <input type="text" value="" name="specs" /><br>
-	  <span class='note'>Separate specs by comma without space (Ex: height,weight,color...) </span>
-	</td>
-      </tr>
-      <tr>
-	<td>Description: </td>
-	<td><textarea name="description" cols="35" rows="5"></textarea></td>
-      </tr>
-      <tr>
-	<td class="btn c_align" colspan="2">
-	  <input type="submit" value="Submit" class="btn" />
-	</td>
-      </tr>	
+    <tr>
+      <td>Main Category: </td>
+      <td>
+	<select name="main_category_id" class="main_category">
+	  <option value=""></option>
+	  <% @main_category.each do | mcat_id, mcat_val | %>
+	    <option value="<%= mcat_id %>"><%= mcat_val %></option>
+	  <% end %>
+	</select>
+      </td>
+    </tr>
+    <tr>
+      <td>Sub Category: </td>
+      <td>
+	<select name="category_id" class="sub_category">
+	  <option value=""></option>
+	</select>
+      </td>
+    </tr>
+    <tr>
+      <td>Item Name: </td>
+      <td><input type="text" value="" name="name"/></td>
+    </tr>
+    <tr><td colspan="2"><hr></td></tr>
+      
+    <tr>
+      <td>Specs: </td>
+      <td>
+	<input type="text" value="" name="specs" size="45"/><br>
+	<span class="note">Separate specs by comma without space (Ex: height,weight,color...) </span>
+      </td>
+    </tr>
+    <tr>
+      <td>Description: </td>
+      <td><textarea name="description" cols="35" rows="5"></textarea></td>
+    </tr>
+    <tr>
+      <td class="btn c_align" colspan="2">
+	<input type="submit" value="Next" class="btn" />
+      </td>
+    </tr>	
   </table>
   <% end %>
 </div> <!-- contents -->
@@ -57,7 +59,7 @@ var categoryObj = { }; //initialize json object for category
   var mainCategoryId = "<%= mcat_id %>";
   categoryObj[ mainCategoryId ] = [] ;
 
-  <% mcat_val["sub_categories"].each do | cat_id, cat_name | %>
+  <% @categories[mcat_id].each do | cat_id, cat_name | %>
     obj = { "<%= cat_id %>": "<%= cat_name %>" };
     categoryObj[ mainCategoryId ].push(obj);
   <% end %>

@@ -12,6 +12,10 @@
 	<td><input type="text" value="" name="img_src"/></td>
       </tr>
       <tr>
+	<td>Price: </td>
+	<td><input type="text" value="" name="price_min"/></td>
+      </tr>
+      <tr>
 	<td>Maker: </td>
 	<td>
 	  <select name="maker_id" class="maker">
@@ -28,7 +32,7 @@
 	  <select name="main_category_id" class="main_category">
 	    <option value=""></option>
 	    <% @main_category.each do | mcat_id, mcat_val | %>
-	      <option value="<%= mcat_id %>"><%= mcat_val["name"] %></option>
+	      <option value="<%= mcat_id %>"><%= mcat_val %></option>
 	    <% end %>
 	  </select>
 	</td>
@@ -87,9 +91,11 @@ var categoryContents = { };
 var itemsObj = { }; //initialize json object for items
 var itemsContents = { };
 
-<% @categories.each do | cat_id, cat_name | %>
-  var categoryId = "<%= cat_id %>";
-  itemsObj[ categoryId ] = [];
+<% @categories.each do | mcat_id, cat_val | %>
+  <% cat_val.each do | cat_id, cat_name | %>
+    var categoryId = "<%= cat_id %>";
+    itemsObj[ categoryId ] = [];
+  <% end %>
 <% end %>
 
 <% @items.each do | item | %>
@@ -101,7 +107,7 @@ var itemsContents = { };
   var mainCategoryId = "<%= mcat_id %>";
   categoryObj[ mainCategoryId ] = [] ;
 
-  <% mcat_val["sub_categories"].each do | cat_id, cat_name | %>
+  <% @categories[mcat_id].each do | cat_id, cat_name | %>
     categoryContents = { "<%= cat_id %>": "<%= cat_name %>" };
     categoryObj[ mainCategoryId ].push(categoryContents);
   <% end %>

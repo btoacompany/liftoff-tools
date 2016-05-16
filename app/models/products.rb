@@ -23,6 +23,7 @@ class  Products < ActiveRecord::Base
     self.maker_id	  = params[:maker_id]
     self.maker_name	  = params[:maker_name]
     self.img_src	  = params[:img_src]
+    self.price_min	  = params[:price_min]
     self.description	  = params[:description]
     self.main_category_id = params[:main_category_id]
     self.category_id	  = params[:category_id]
