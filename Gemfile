@@ -48,3 +48,4 @@ end
 # custom gems
 gem 'moped'
 gem 'mongoid', github: 'mongoid/mongoid'
+gem 'jquery-turbolinks'

@@ -4,6 +4,8 @@ CREATE TABLE items (
   name VARCHAR(255) NOT NULL,
   img_src VARCHAR(255),
   specs VARCHAR(255),
+  display_type VARCHAR(255),
+  metric VARCHAR(255),
   description TEXT,
   main_category_id INT NOT NULL,
   category_id INT NOT NULL,
