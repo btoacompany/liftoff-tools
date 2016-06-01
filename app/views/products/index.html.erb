@@ -8,6 +8,7 @@
 	<a href="/products/list/<%= params[:cat_id] %>/<%= item[:item_code] %>"><%= item[:name] %></a>
       </li>
     <% end %>
+    </ul>
   </div>
 
   <div id="content_products">
@@ -29,7 +30,7 @@
 	</div>
       <% end %> <br>
 
-      <%= form_tag( "/products", method: "get", id: "search_form" ) do %>
+      <%= form_tag( "/products/list/#{params[:cat_id]}/#{params[:item_code]}", method: "get", id: "search_form" ) do %>
 	<table class="tbl_common center" border="0">
 	  <tr>
 	    <td class="label">メーカー名</td>

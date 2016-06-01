@@ -1,0 +1,12 @@
+misumi = [
+"http://jp.misumi-ec.com/vona2/detail/222005584783/?HissuCode=AT42QT1010-MAH",
+"http://jp.misumi-ec.com/vona2/detail/110300531760/?HissuCode=MCAB30",
+"http://jp.misumi-ec.com/vona2/detail/223000316793/?HissuCode=TG14",
+"http://jp.misumi-ec.com/vona2/detail/222005584783/?HissuCode=AT42QT1011-TSHR%20LOT4500"
+]
+
+monotaro = [
+"http://www.monotaro.com/p/0947/0745/",
+"http://www.monotaro.com/p/0801/0676/",
+"http://www.monotaro.com/p/0960/0726/"
+]

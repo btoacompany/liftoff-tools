@@ -21,7 +21,7 @@
 	    <option value=""></option>
 	    <% @main_category.each do | mcat_id, mcat_val | %>
 	      <option value="<%= mcat_id %>" 
-		<% if mcat_id == @main_category_id %> selected="selected" <% end %>><%= mcat_val["name"] %></option>
+		<% if mcat_id == @main_category_id %> selected="selected" <% end %>><%= mcat_val %></option>
 	    <% end %>
 	  </select>
 	</td>

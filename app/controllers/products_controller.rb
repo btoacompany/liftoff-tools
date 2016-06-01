@@ -5,8 +5,8 @@ class ProductsController < ApplicationController
 
   def init 
     c = Category.new
-    @main_category = c.get_main_category2
-    @categories = c.get_categories2
+    @main_category = c.get_main_category
+    @categories = c.get_categories
   end
 
   def top
@@ -19,7 +19,7 @@ class ProductsController < ApplicationController
 
   def index
     item_code = params[:item].present? ? params[:item] : "1000101"
-    @items = Items.where(:category_id => params[:cat_id])
+    @items = Items.where(:category_id => params[:cat_id], :delete_flag => 0)
     @item = Items.where(:item_code => item_code).first
     item_specs = @item[:specs].split(",")
 
@@ -111,6 +111,8 @@ class ProductsController < ApplicationController
   def create_action
     product_shops = ProductShops.new
     product_shops.save_record(params)
+
+    redirect_to_index
   end
 
   def edit
@@ -150,11 +152,14 @@ class ProductsController < ApplicationController
   
   def edit_action
     product_shops = ProductShops.find(params[:id].to_i)
+
     if (params[:delete_flag].to_i == 1)
       product_shops.delete_record 
     else
       product_shops.save_record(params)
     end
+
+    redirect_to_index
   end
   
   def delete_action
@@ -183,9 +188,12 @@ class ProductsController < ApplicationController
     @makers	= Makers.where(:id => session[:items][:maker_id]).first
     session[:items].merge!({ :maker_name => @makers.name })
 
+    mcat_id = session[:items][:main_category_id].to_i
+    cat_id = session[:items][:category_id].to_i
+
     @items	= Items.where(:item_code => session[:items][:item_code]).first
-    @main_cat	= MainCategory.where(:main_category_id => session[:items][:main_category_id]).first
-    @sub_cat	= Category.where(:category_id => session[:items][:category_id]).first
+    @main_cat	= @main_category[mcat_id] 
+    @sub_cat	= @categories[mcat_id][cat_id] 
     @spec_keys	= params[:spec_keys].split(",")
 
     session[:items][:description].strip!
@@ -235,6 +243,10 @@ class ProductsController < ApplicationController
   end
 
   def redirect_to_index
-    redirect_to "/items" 
+    session[:items].symbolize_keys!
+    item_code = session[:items][:item_code]
+    cat_id = session[:items][:category_id]
+
+    redirect_to "/products/list/#{cat_id}/#{item_code}" 
   end
 end

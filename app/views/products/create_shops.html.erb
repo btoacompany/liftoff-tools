@@ -103,7 +103,9 @@ $('.btn_submit').click(function() {
 
     if ( (shopIdsArr.length-1) == key ){
       //TODO: add validations
-      window.location.href = "/products"
+      cat_id = "<%= session['items']['category_id'] %>";
+      item_code = "<%= session['items']['item_code'] %>";
+      window.location.href = "/products/list/"+cat_id+"/"+item_code;
     }
   });
 });
