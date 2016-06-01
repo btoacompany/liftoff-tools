@@ -8,7 +8,7 @@
 	<a href="/"><%= mcat_val %></a>
 	<ul>
 	  <% @categories[mcat_id].each do | cat_id, cat_val | %>
-	    <li><a href="/products/list?cat_id=<%= cat_id %>"><%= cat_val %></a></li>
+	    <li><a href="/products/list/<%= cat_id %>"><%= cat_val %></a></li>
 	  <% end %>
 	</ul>
       </li>
